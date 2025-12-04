@@ -3,7 +3,7 @@
 Personal Routine Assistant & Time Tracker
 
 ## 📌 Description
-[Here will be a brief and clear description of the project. What it does, what problem it solves.]
+**TempoTrack is a backend system with an API and a Telegram bot for managing personal schedules and time tracking. The system helps users structure their day and sends task reminders via Telegram. The project is built on clean architecture using a modern Python stack.**
 
 ## 🛠 Technologies (Stack)
 - **Backend:** Python 3.11, FastAPI, Aiogram
