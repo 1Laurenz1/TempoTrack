@@ -42,8 +42,8 @@ class ScheduleModel(Base, TimeStampMixin):
         nullable=False
     )
     
-    telegram_id: Mapped[BigInteger] = mapped_column(
-        ForeignKey("users.telegram_id"),
+    user_id: Mapped[BigInteger] = mapped_column(
+        ForeignKey("users.id"),
         nullable=False,
         index=True
     )
