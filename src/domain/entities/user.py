@@ -16,7 +16,7 @@ class User:
     telegram_id: Optional[int] = None
     
     schedules_count: int = 0
-    main_schedule: Optional[str] = None
+    main_schedule: Optional[int] = None
     
     created_at: datetime = field(default_factory=datetime.now(timezone.utc))
     updated_at: datetime = field(default_factory=datetime.now(timezone.utc))
