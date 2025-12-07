@@ -1,4 +1,4 @@
-from src.domain.value_objects.day_of_week import DAY_OF_WEEK
+from src.domain.value_objects.day_of_week import DayOfWeek
 
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
@@ -14,7 +14,7 @@ class ScheduleItems:
     name: str = field(default_factory=str)
     description: Optional[str] = None
     
-    day_of_week: Optional[DAY_OF_WEEK] = None
+    day_of_week: Optional[DayOfWeek] = None
     
     time_start: datetime.time
     time_end: datetime.time

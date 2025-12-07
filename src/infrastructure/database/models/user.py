@@ -76,7 +76,7 @@ class UserModel(Base, TimeStampMixin):
     
     @hybrid_property
     def is_active(self) -> bool:
-        return self.schedules > 0
+        return self.schedules_count > 0
     
     @hybrid_property
     def full_name(self) -> str: 
