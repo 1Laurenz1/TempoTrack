@@ -81,3 +81,5 @@ class UserModel(Base, TimeStampMixin):
     @hybrid_property
     def full_name(self) -> str: 
         return f"{self.first_name} {self.last_name}"
+    
+    # TODO: Create password encryption methods
