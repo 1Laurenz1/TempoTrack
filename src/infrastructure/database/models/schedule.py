@@ -1,10 +1,11 @@
+from typing import List
 from sqlalchemy import (
     Integer,
     String,
     BigInteger,
     ForeignKey
 )
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.dialects.postgresql import ENUM
 
 from src.infrastructure.database.session import Base
@@ -46,4 +47,15 @@ class ScheduleModel(Base, TimeStampMixin):
         ForeignKey("users.id"),
         nullable=False,
         index=True
+    )
+    
+    user: Mapped["UserModel"] = relationship(
+        "UserModel",
+        back_populates="schedules"
+    )
+    
+    items: Mapped[List["ScheduleItemsModel"]] = relationship(
+        "ScheduleItemsModel",
+        back_populates="schedule",
+        cascade="all, delete-orphan"
     )
