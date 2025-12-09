@@ -3,7 +3,7 @@ from sqlalchemy import (
     String,
     BigInteger,
 )
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.ext.hybrid import hybrid_property
 
 from src.infrastructure.database.session import Base
@@ -11,7 +11,7 @@ from src.infrastructure.database.mixins.time_stamp_mixin import TimeStampMixin
 
 from src.domain.entities.user import User
 
-from typing import Optional
+from typing import Optional, List
 
 
 class UserModel(Base, TimeStampMixin):
@@ -71,6 +71,16 @@ class UserModel(Base, TimeStampMixin):
         nullable=True,
         index=True,
         default=None,
+    )
+    
+    schedules: Mapped[List['ScheduleModel']] = relationship(
+        'ScheduleModel',
+        back_populates="user",
+        cascade="all, delete-orphan"
+    )
+    
+    items: Mapped[List["ScheduleItemsModel"]] = relationship(
+        back_populates="user"
     )
     
     
