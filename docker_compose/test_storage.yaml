@@ -3,22 +3,22 @@ services:
     image: postgres:17
     container_name: postgres_test
     
-    restart: unless-stopped
+    restart: always
     
     environment:
-      POSTGRES_DB: test_db
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: test_db_passwd
+      POSTGRES_DB: test_db
     ports:
-      - "5433:5432"
+      - "5432:5432"
     volumes:
       - test_pgdata:/var/lib/postgresql/data
     networks:
-      - backend
+      - custom
 
 volumes:
   test_pgdata:
 
 networks:
-  backend:
+  custom:
     driver: bridge
