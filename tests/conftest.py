@@ -7,6 +7,10 @@ from sqlalchemy.orm import sessionmaker
 from src.infrastructure.database.session import Base
 from src.infrastructure.config.config_reader import settings
 
+from src.infrastructure.database.models.user import UserModel
+from src.infrastructure.database.models.schedule import ScheduleModel
+from src.infrastructure.database.models.schedule_items import ScheduleItemsModel
+
 import pytest_asyncio
 import pytest
 
