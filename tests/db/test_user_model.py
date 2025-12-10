@@ -1,3 +1,4 @@
+import asyncio
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.infrastructure.database.models.user import UserModel
@@ -6,8 +7,8 @@ import pytest
 import pytest_asyncio
 
 
-@pytest_asyncio.is_async_test   
-async def test_user_creation(db_session: AsyncSession):
+@pytest.mark.asyncio
+async def test_user_creation_orm(db_session):
     user = UserModel(
         username="John",
         email="john@example.com",

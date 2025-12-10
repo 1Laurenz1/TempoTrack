@@ -16,7 +16,7 @@ import pytest
 
 import asyncio
 
-
+# asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
 @pytest_asyncio.fixture
 async def event_loop():
@@ -26,7 +26,7 @@ async def event_loop():
     
 
 
-@pytest_asyncio.fixture(scope="session")
+@pytest_asyncio.fixture
 async def test_engine():
     engine = create_async_engine(
         settings.TEST_DATABASE_URL.get_secret_value(),
