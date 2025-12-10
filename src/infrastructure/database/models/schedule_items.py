@@ -4,7 +4,7 @@ from sqlalchemy import (
     BigInteger,
     ForeignKey
 )
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.dialects.postgresql import ENUM, TIME
 from sqlalchemy.ext.hybrid import hybrid_property
 
@@ -66,6 +66,14 @@ class ScheduleItemsModel(Base, TimeStampMixin):
         nullable=False,
         index=True
     )
+    
+    schedule: Mapped["ScheduleModel"] = relationship(
+        "ScheduleModel",
+        back_populates="items"
+    )
+    
+    user = relationship("UserModel", back_populates="items")
+    
     
     
     @hybrid_property

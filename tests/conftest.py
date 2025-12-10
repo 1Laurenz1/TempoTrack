@@ -7,12 +7,16 @@ from sqlalchemy.orm import sessionmaker
 from src.infrastructure.database.session import Base
 from src.infrastructure.config.config_reader import settings
 
+from src.infrastructure.database.models.user import UserModel
+from src.infrastructure.database.models.schedule import ScheduleModel
+from src.infrastructure.database.models.schedule_items import ScheduleItemsModel
+
 import pytest_asyncio
 import pytest
 
 import asyncio
 
-
+# asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
 @pytest_asyncio.fixture
 async def event_loop():
@@ -22,7 +26,7 @@ async def event_loop():
     
 
 
-@pytest_asyncio.fixture(scope="session")
+@pytest_asyncio.fixture
 async def test_engine():
     engine = create_async_engine(
         settings.TEST_DATABASE_URL.get_secret_value(),
