@@ -4,6 +4,7 @@ from src.infrastructure.database.models.user import UserModel
 from src.domain.value_objects.schedule_types import ScheduleTypes
 
 import pytest
+import pytest_asyncio
 
 
 @pytest.mark.asyncio
