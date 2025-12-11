@@ -53,11 +53,11 @@ class ScheduleItemsModel(Base, TimeStampMixin):
     )
     
     time_start: Mapped[time] = mapped_column(
-        TIME(timezone=True),
+        TIME(timezone=False),
         nullable=False
     )
     time_end: Mapped[time] = mapped_column(
-        TIME(timezone=True),
+        TIME(timezone=False),
         nullable=False
     )
     
