@@ -12,6 +12,7 @@ from src.infrastructure.exceptions.infrastructure_error import (
 from src.infrastructure.exceptions.user_already_exists_error import (
     UserAlreadyExistsError
 )
+from src.infrastructure.database.mappers.user_mapper import UserMapper
 
 from src.common.logging.logger_main import logger
 
@@ -30,12 +31,11 @@ class UserRepositoryImpl(UserRepository):
             result = self.session.execute(
                 select(UserModel).where(UserModel.email == email)
             )
-            user_email = result.scalar_one_or_none()
+            user_model = result.scalar_one_or_none()
             
-            if user_email:
-                logger.info(f"User with user email '{user_email}' was found in the database")
-                # TODO: Create from_domain and to_domain methods
-                ...
+            if user_model:
+                logger.info(f"User with user email '{email}' was found in the database")
+                return UserMapper.to_domain(user_model)
             return None
             
         except SQLAlchemyError as e:
@@ -45,7 +45,7 @@ class UserRepositoryImpl(UserRepository):
         
     async def add(self, user: User) -> Optional[User]:
         try:
-            user_model = ... # TODO: Create from_domain(user)
+            user_model = UserMapper.to_orm(user)
             
             self.session.add(user_model)
             await self.session.commit()
@@ -53,7 +53,7 @@ class UserRepositoryImpl(UserRepository):
             
             logger.info(f"User {user_model} was successfully created")
             
-            return ... # TODO: return to_domain(user_model)
+            return UserMapper.to_domain(user_model)
         except IntegrityError:
             await self.session.rollback()
             logger.error(f"User with email '{user.email}' already exists.")
