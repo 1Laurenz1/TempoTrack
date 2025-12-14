@@ -1,0 +1,3 @@
+class InfrastructureError(Exception):
+    """An error occurred at the infrastructure layer"""
+    ...

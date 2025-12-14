@@ -1,0 +1,3 @@
+class UserAlreadyExistsError(Exception):
+    """Called when the user is found in the database"""
+    ...
