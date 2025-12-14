@@ -33,3 +33,33 @@ def test_user_mapper_to_orm():
     assert orm_user.telegram_id == user.telegram_id
     assert orm_user.schedules_count == user.schedules_count
     assert orm_user.main_schedule == user.main_schedule
+    
+    
+def test_user_mapper_to_domain():
+    orm_user = UserModel(
+        id=1,
+        username="testuser",
+        email="test@example.com",
+        password="hashed_password",
+        first_name="Test",
+        last_name="User",
+        tg_username="tg_test",
+        telegram_id=123456,
+        schedules_count=2,
+        main_schedule=1,
+    )
+
+    domain_user = UserMapper.to_domain(orm_user)
+
+    assert isinstance(domain_user, User)
+
+    assert domain_user.id == orm_user.id
+    assert domain_user.username == orm_user.username
+    assert domain_user.email == orm_user.email
+    assert domain_user.password == orm_user.password
+    assert domain_user.first_name == orm_user.first_name
+    assert domain_user.last_name == orm_user.last_name
+    assert domain_user.tg_username == orm_user.tg_username
+    assert domain_user.telegram_id == orm_user.telegram_id
+    assert domain_user.schedules_count == orm_user.schedules_count
+    assert domain_user.main_schedule == orm_user.main_schedule
