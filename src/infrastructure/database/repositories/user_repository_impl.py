@@ -45,7 +45,7 @@ class UserRepositoryImpl(UserRepository):
         
     async def add(self, user: User) -> Optional[User]:
         try:
-            user_model = ... # TODO: Create from_domain and to_domain methods
+            user_model = ... # TODO: Create from_domain(user)
             
             self.session.add(user_model)
             await self.session.commit()
@@ -53,7 +53,7 @@ class UserRepositoryImpl(UserRepository):
             
             logger.info(f"User {user_model} was successfully created")
             
-            return ... # TODO: Create from_domain and to_domain methods 
+            return ... # TODO: return to_domain(user_model)
         except IntegrityError:
             await self.session.rollback()
             logger.error(f"User with email '{user.email}' already exists.")
