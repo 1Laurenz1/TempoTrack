@@ -28,7 +28,7 @@ class UserRepositoryImpl(UserRepository):
         
     async def get_user_by_email(self, email: EmailStr) -> Optional[User]:
         try:
-            result = self.session.execute(
+            result = await self.session.execute(
                 select(UserModel).where(UserModel.email == email)
             )
             user_model = result.scalar_one_or_none()
@@ -49,7 +49,7 @@ class UserRepositoryImpl(UserRepository):
             
             self.session.add(user_model)
             await self.session.commit()
-            self.session.refresh(user_model)
+            await self.session.refresh(user_model)
             
             logger.info(f"User {user_model} was successfully created")
             
@@ -59,7 +59,7 @@ class UserRepositoryImpl(UserRepository):
             logger.error(f"User with email '{user.email}' already exists.")
             raise UserAlreadyExistsError(
                 f"User with email '{user.email}' already exists"
-            ) from e
+            )
         except SQLAlchemyError as e:
             await self.session.rollback()
             logger.error(f"An unknown error occurred in add with user {user}")
