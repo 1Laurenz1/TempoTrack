@@ -4,7 +4,6 @@ from dataclasses import dataclass
 
 from jwt.exceptions import PyJWTError
 
-from src.infrastructure.config.config_reader import settings
 from src.application.exceptions.auth import InvalidTokenError
 
 
@@ -39,10 +38,3 @@ class JwtService:
             )
         except PyJWTError as e:
             raise InvalidTokenError("Invalid or expired token") from e
-        
-        
-jwt_service = JwtService(
-    secret_key=settings.SECRET_KEY.get_secret_value(),
-    algorithm=settings.ALGORITHM,
-    access_token_ttl_minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES
-)
