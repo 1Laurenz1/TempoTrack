@@ -37,7 +37,8 @@ class UserModel(Base, TimeStampMixin):
         index=True
     )
     password: Mapped[str] = mapped_column(
-        String(256)
+        String(256),
+        ...
     )
     
     first_name: Mapped[Optional[str]] = mapped_column(
