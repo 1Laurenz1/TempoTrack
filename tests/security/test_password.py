@@ -1,18 +1,22 @@
-from src.common.security.password import hash_password, validate_password
+from src.application.services.password_service import PasswordService
 
 import pytest
 
 
 def test_hash_and_verify_password():
+    password_service = PasswordService()
+    
     password = 'top-secret'
     
-    hashed = hash_password(password)
+    hashed = password_service.hash(password)
     
     assert hashed != password
-    assert validate_password(password, hashed) is True
+    assert password_service.verify(password, hashed) is True
     
 
 def test_verify_password_wrong_password():
-    hashed = hash_password("correct-password")
+    password_service = PasswordService()
     
-    assert validate_password("wrong-password", hashed) is False
+    hashed = password_service.hash("correct-password")
+    
+    assert password_service.verify("wrong-password", hashed) is False
