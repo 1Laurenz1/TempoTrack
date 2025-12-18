@@ -4,6 +4,6 @@ from fastapi import APIRouter
 router = APIRouter()
 
 
-@router.get("/register")
+@router.post("/register")
 async def register():
     return {"detail": "User registered"}
