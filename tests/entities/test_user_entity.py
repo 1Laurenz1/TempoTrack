@@ -2,13 +2,15 @@ import pytest
 from datetime import datetime
 
 from src.domain.entities.user import User
+from src.application.services.password_service import PasswordService
 
 
 def test_user_creation():
+    password_manager = PasswordService()
     user = User(
         username="john",
         email="john@example.com",
-        password="123",
+        password=password_manager.hash("123"),
         first_name="John",
         last_name="Doe",
         tg_username="@john",
@@ -19,7 +21,7 @@ def test_user_creation():
 
     assert user.username == "john"
     assert user.email == "john@example.com"
-    assert user.password == "123"
+    assert password_manager.verify("123", user.password) is True
     assert user.telegram_id == 12345
     assert user.schedules_count == 2
     assert user.main_schedule == 10
