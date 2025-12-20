@@ -1,9 +1,39 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends, HTTPException
+
+from src.interfaces.web.schemas.register import (
+    RegisterUserRequest,
+    RegisterUserResponse
+)
+from src.interfaces.web.dependencies.db import get_user_repository
+from src.interfaces.web.dependencies.password import get_password_service
+from src.interfaces.web.dependencies.usecases import get_register_user_usecase
+
+from src.infrastructure.exceptions.user_already_exists_error import (
+    UserAlreadyExistsError
+)
+from src.infrastructure.exceptions.infrastructure_error import (
+    InfrastructureError
+)
+
+
+from src.application.usecases.register_user import RegisterUserUseCase
+from src.application.services.password_service import PasswordService
+
 
 
 router = APIRouter()
 
 
-@router.post("/register")
-async def register():
-    return {"detail": "User registered"}
+@router.post("/register", response_model=RegisterUserResponse)
+async def register(
+    data: RegisterUserRequest,
+    register_usecase: RegisterUserUseCase = Depends(get_register_user_usecase),
+):
+    try:
+        created_user = await register_usecase.execute(data)
+    except UserAlreadyExistsError:
+        raise HTTPException(status_code=400, detail="User already exists")
+    except InfrastructureError:
+        raise HTTPException(status_code=500, detail="Internal Server Error")
+    
+    return created_user
