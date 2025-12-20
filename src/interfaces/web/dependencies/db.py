@@ -8,7 +8,7 @@ from src.infrastructure.database.repositories.user_repository_impl import (
 )
 
 
-async def get_user_repository(
-    session: AsyncSession = Depends(UserRepositoryImpl)
-):
+def get_user_repository(
+    session: AsyncSession = Depends(get_session),
+) -> UserRepositoryImpl:
     return UserRepositoryImpl(session)
