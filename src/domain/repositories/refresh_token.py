@@ -5,10 +5,9 @@ from src.domain.entities.refresh_token import RefreshToken
 from typing import Optional
 
 
-
-class RefreshTokenRepisitory(ABC):
+class RefreshTokenRepository(ABC):
     @abstractmethod
-    async def exists(self, token_hash: bytes) -> Optional[RefreshToken]:
+    async def exists_refresh_token(self, token_hash: bytes) -> Optional[RefreshToken]:
         """Checks if a refresh token exists in the database. Returns None if not found"""
         ...
     
