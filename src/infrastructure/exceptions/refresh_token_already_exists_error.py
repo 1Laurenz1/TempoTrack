@@ -1,0 +1,3 @@
+class RefreshTokenAlreadyExistsError(Exception):
+    """Called when the refresh token is found in the database"""
+    ...
