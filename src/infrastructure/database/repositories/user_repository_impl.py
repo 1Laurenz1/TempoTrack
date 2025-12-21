@@ -1,4 +1,4 @@
-from sqlalchemy import select
+from sqlalchemy import or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 
@@ -40,6 +40,33 @@ class UserRepositoryImpl(UserRepository):
             
         except SQLAlchemyError as e:
             logger.info(f"An unknown error occurred in get_user_by_id: {e}")
+            raise InfrastructureError("Error reading from the database") from e
+        
+        
+    async def get_user_by_login(
+        self,
+        login: str
+    ) -> Optional[User]:
+        try:
+            result = await self.session.execute(
+                select(UserModel).where(
+                    or_(
+                        UserModel.email == login,
+                        UserModel.username == login
+                    )
+                )
+            )
+
+            user_model = result.scalar_one_or_none()
+
+            if user_model:
+                logger.info(f"User with login '{login}' was found in the database")
+                return UserMapper.to_domain(user_model)
+
+            return None
+
+        except SQLAlchemyError as e:
+            logger.error(f"Error in get_user_by_login: {e}")
             raise InfrastructureError("Error reading from the database") from e
         
         

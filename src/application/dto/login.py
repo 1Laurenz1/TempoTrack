@@ -15,5 +15,5 @@ class LoginUserRequest:
 
 @dataclass(slots=True)
 class LoginUserResponse:
-    email: str
-    username: str
+    email: Optional[str]
+    username: Optional[str]
