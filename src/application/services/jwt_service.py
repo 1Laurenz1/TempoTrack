@@ -20,12 +20,13 @@ class JwtService:
         expire = datetime.now(timezone.utc) + timedelta(
             minutes=self.access_token_ttl_minutes
         )
-        to_encode.update({"exp": expire})
+        now = datetime.now(timezone.utc)
+        to_encode.update({"iat": now, "exp": expire})
         
         return jwt.encode(
             to_encode,
             self.secret_key,
-            algorithm=self.algorithm
+            algorithm=self.algorithm,
         )
 
         
