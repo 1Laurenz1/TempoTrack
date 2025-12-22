@@ -5,6 +5,7 @@ from sqlalchemy import (
 )
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.ext.hybrid import hybrid_property
+from sqlalchemy.dialects.postgresql import BYTEA
 
 from src.infrastructure.database.session import Base
 from src.infrastructure.database.mixins.time_stamp_mixin import TimeStampMixin
@@ -36,8 +37,9 @@ class UserModel(Base, TimeStampMixin):
         nullable=False,
         index=True
     )
-    password: Mapped[str] = mapped_column(
-        String(256)
+    password: Mapped[bytes] = mapped_column(
+        BYTEA(256),
+        nullable=False
     )
     
     first_name: Mapped[Optional[str]] = mapped_column(

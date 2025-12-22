@@ -5,14 +5,16 @@ from src.domain.value_objects.schedule_types import ScheduleTypes
 
 import pytest
 import pytest_asyncio
+from src.application.services.password_service import PasswordService
 
 
 @pytest.mark.asyncio
 async def test_schedule_creation(db_session: AsyncSession):
+    password_manager = PasswordService()
     user = UserModel(
         username="Alice",
         email="alice@example.com",
-        password="secret"
+        password=password_manager.hash("secret")
     )
     db_session.add(user)
     await db_session.commit()

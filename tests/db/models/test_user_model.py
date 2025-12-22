@@ -5,14 +5,16 @@ from src.infrastructure.database.models.user import UserModel
 
 import pytest   
 import pytest_asyncio
+from src.application.services.password_service import PasswordService
 
 
 @pytest.mark.asyncio
 async def test_user_creation_orm(db_session):
+    password_manager = PasswordService()
     user = UserModel(
         username="John",
         email="john@example.com",
-        password="secret",
+        password=password_manager.hash("secret"),
         first_name="John",
         last_name="Alderson",
         tg_username="JohnAlderson",
@@ -28,7 +30,7 @@ async def test_user_creation_orm(db_session):
     assert user.id is not None
     assert user.username == "John"
     assert user.email == "john@example.com"
-    assert user.password == "secret"   
+    assert password_manager.verify("secret", user.password) is True
     assert user.first_name == "John"
     assert user.last_name == "Alderson"
     assert user.tg_username == "JohnAlderson"

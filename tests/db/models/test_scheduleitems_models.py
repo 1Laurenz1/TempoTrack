@@ -1,6 +1,7 @@
 from datetime import datetime, time, timedelta
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from src.application.services.password_service import PasswordService
 from src.domain.value_objects.day_of_week import DayOfWeek
 from src.infrastructure.database.models.schedule_items import ScheduleItemsModel
 from src.infrastructure.database.models.user import UserModel
@@ -14,11 +15,13 @@ import pytest_asyncio
 
 @pytest.mark.asyncio
 async def test_scheduleitems_model(db_session: AsyncSession):
+    password_service = PasswordService()
+
     user = UserModel(
         id=10,
         username="test",
         email="test@example.com",
-        password="123"
+        password=password_service.hash("123")
     )
     db_session.add(user)
 

@@ -5,6 +5,8 @@ from datetime import datetime, timezone
 
 @dataclass
 class User:
+    schedules_count: int = 0
+
     id: Optional[int] = None
     username: str = field(default_factory=str)
     email: Optional[str] = None
@@ -15,7 +17,6 @@ class User:
     tg_username: Optional[str] = None
     telegram_id: Optional[int] = None
 
-    schedules_count: int = 0
     main_schedule: Optional[int] = None
 
     created_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))

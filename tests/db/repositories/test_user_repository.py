@@ -8,16 +8,17 @@ from src.infrastructure.database.repositories.user_repository_impl import UserRe
 from src.infrastructure.exceptions.user_already_exists_error import (
     UserAlreadyExistsError
 )
+from src.application.services.password_service import PasswordService
 
 
 @pytest.mark.asyncio
 async def test_add_user_success(db_session: AsyncSession):
     user_repository = UserRepositoryImpl(db_session)
-    
+    password_manager = PasswordService()
     user = User(
         username="john",
         email="john@example.com",
-        password="hashed-password",
+        password=password_manager.hash("hashed-password"),
         first_name="John",
         last_name="Doe",
         tg_username="john_doe",
@@ -37,12 +38,12 @@ async def test_add_user_success(db_session: AsyncSession):
 @pytest.mark.asyncio
 async def test_add_user_already_exists(db_session: AsyncSession):
     user_repository = UserRepositoryImpl(db_session)
-
+    password_manager = PasswordService()
     
     user = User(
         username="john",
         email="john@example.com",
-        password="hashed-password",
+        password=password_manager.hash("hashed-password"),
         first_name="John",
         last_name="Doe",
         tg_username="john_doe",
@@ -60,12 +61,13 @@ async def test_add_user_already_exists(db_session: AsyncSession):
 @pytest.mark.asyncio
 async def test_get_user_by_email_success(db_session: AsyncSession):
     user_repository = UserRepositoryImpl(db_session)
-    
+    password_manager = PasswordService()
+
     
     user = User(
         username="john",
         email="john@example.com",
-        password="hashed-password",
+        password=password_manager.hash("hashed-password"),
         first_name="John",
         last_name="Doe",
         tg_username="john_doe",
