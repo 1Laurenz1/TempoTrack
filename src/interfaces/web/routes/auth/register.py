@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, status
 
 from src.interfaces.web.schemas.register import (
     RegisterUserRequest,
@@ -19,7 +19,11 @@ from src.application.usecases.register_user import RegisterUserUseCase
 router = APIRouter()
 
 
-@router.post("/register", response_model=RegisterUserResponse)
+@router.post(
+    "/register",
+    response_model=RegisterUserResponse,
+    status_code=status.HTTP_200_OK
+)
 async def register(
     data: RegisterUserRequest,
     register_usecase: RegisterUserUseCase = Depends(get_register_user_usecase),

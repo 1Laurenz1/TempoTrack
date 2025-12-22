@@ -19,7 +19,7 @@ class RefreshTokenMapper:
         return RefreshToken(
             id=refresh_token_model.id,
             user_id=refresh_token_model.user_id,
-            token_hash=refresh_token_model.token_hash.decode() if isinstance(refresh_token_model.token_hash, bytes) else refresh_token_model.token_hash,
+            token_hash=refresh_token_model.token_hash,
             revoked=refresh_token_model.revoked,
             expires_at=refresh_token_model.expires_at,
             created_at=refresh_token_model.created_at,

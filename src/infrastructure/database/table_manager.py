@@ -110,6 +110,7 @@ if __name__ == "__main__":
     from src.infrastructure.database.models.user import UserModel
     from src.infrastructure.database.models.schedule import ScheduleModel
     from src.infrastructure.database.models.schedule_items import ScheduleItemsModel
+    from src.infrastructure.database.models.refresh_token import RefreshTokenModel
 
     inspector = ModelsInspector()
     inspector.table_names()

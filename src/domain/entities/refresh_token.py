@@ -6,7 +6,7 @@ from datetime import datetime, timezone
 @dataclass
 class RefreshToken:
     user_id: int
-    token_hash: str
+    token_hash: bytes
     expires_at: datetime    
     
     id: Optional[int] = None

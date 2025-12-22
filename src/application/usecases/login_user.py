@@ -50,7 +50,7 @@ class LoginUserUseCase:
                     "Invalid username, email or password"
                 )
 
-            raw_refresh_token = self.refresh_token_service.generate()
+            raw_refresh_token = self.refresh_token_service.create_refresh_token()
 
             refresh_token = RefreshToken(
                 user_id=user.id,
@@ -66,5 +66,7 @@ class LoginUserUseCase:
 
             return LoginUserResponse(
                 email=user.email,
-                username=user.username
+                username=user.username,
+                access_token=access_token,
+                refresh_token=refresh_token.token_hash
             )
