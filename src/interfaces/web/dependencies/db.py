@@ -9,6 +9,9 @@ from src.infrastructure.database.repositories.user_repository_impl import (
 from src.infrastructure.database.repositories.refresh_token_reposiotry_impl import (
     RefreshTokenRepositoryImpl
 )
+from src.infrastructure.database.repositories.schedule_repository_impl import (
+    ScheduleRepositoryImpl
+)
 
 
 def get_user_repository(
@@ -21,3 +24,9 @@ def get_refresh_token_repository(
     session: AsyncSession = Depends(get_session),
 ) -> RefreshTokenRepositoryImpl:
     return RefreshTokenRepositoryImpl(session)
+
+
+def get_schedule_repository(
+    session: AsyncSession = Depends(get_session),
+) -> ScheduleRepositoryImpl:
+    return ScheduleRepositoryImpl(session)

@@ -9,6 +9,11 @@ from typing import Optional
 class UserRepository(ABC):
     
     @abstractmethod
+    async def get_user_by_id(self, id: int) -> Optional[User]:
+        """Returns a user by their id or None if not found"""
+        ...
+    
+    @abstractmethod
     async def get_user_by_email(self, email: EmailStr) -> Optional[User]:
         """Return user by their email. Returns None if not found."""
         ...

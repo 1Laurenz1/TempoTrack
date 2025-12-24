@@ -26,6 +26,23 @@ class UserRepositoryImpl(UserRepository):
         self.session = session
         
         
+    async def get_user_by_id(self, id: int) -> Optional[User]:
+        try:
+            result = await self.session.execute(
+                select(UserModel).where(UserModel.id == id)
+            )
+            user_model = result.scalar_one_or_none()
+            
+            if user_model:
+                logger.info(f"User with user id '{id}' was found in the database")
+                return UserMapper.to_domain(user_model)
+            return None
+            
+        except SQLAlchemyError as e:
+            logger.info(f"An unknown error occurred in get_user_by_id: {e}")
+            raise InfrastructureError("Error reading from the database") from e
+
+        
     async def get_user_by_email(self, email: EmailStr) -> Optional[User]:
         try:
             result = await self.session.execute(
@@ -39,7 +56,7 @@ class UserRepositoryImpl(UserRepository):
             return None
             
         except SQLAlchemyError as e:
-            logger.info(f"An unknown error occurred in get_user_by_id: {e}")
+            logger.info(f"An unknown error occurred in get_user_by_email: {e}")
             raise InfrastructureError("Error reading from the database") from e
         
         
@@ -62,9 +79,7 @@ class UserRepositoryImpl(UserRepository):
             if user_model:
                 logger.info(f"User with login '{login}' was found in the database")
                 return UserMapper.to_domain(user_model)
-
             return None
-
         except SQLAlchemyError as e:
             logger.error(f"Error in get_user_by_login: {e}")
             raise InfrastructureError("Error reading from the database") from e
@@ -90,4 +105,4 @@ class UserRepositoryImpl(UserRepository):
         except SQLAlchemyError as e:
             await self.session.rollback()
             logger.error(f"An unknown error occurred in add with user {user}")
-            raise InfrastructureError("Database error") from e
+            raise InfrastructureError("Error reading from the database") from e

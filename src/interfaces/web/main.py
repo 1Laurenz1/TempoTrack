@@ -7,6 +7,7 @@ def create_app():
     app = FastAPI(
         title="TempoTrack",
         debug=True,
+        swagger_ui_parameters={"persistAuthorization": True},
     )
 
     
