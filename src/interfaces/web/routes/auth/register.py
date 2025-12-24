@@ -20,7 +20,7 @@ router = APIRouter()
 
 
 @router.post(
-    "/register",
+    "/auth/register/",
     response_model=RegisterUserResponse,
     status_code=status.HTTP_200_OK
 )

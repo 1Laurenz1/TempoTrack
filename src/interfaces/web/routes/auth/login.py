@@ -24,7 +24,7 @@ router = APIRouter()
 
 
 @router.post(
-    "/login",
+    "/auth/login/",
     response_model=LoginUserResponse,
     status_code=status.HTTP_200_OK
 )
