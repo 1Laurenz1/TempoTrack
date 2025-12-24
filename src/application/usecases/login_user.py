@@ -68,5 +68,6 @@ class LoginUserUseCase:
                 email=user.email,
                 username=user.username,
                 access_token=access_token,
-                refresh_token=refresh_token.token_hash
+                # refresh_token=refresh_token.token_hash
+                refresh_token=raw_refresh_token
             )
