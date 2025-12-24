@@ -7,7 +7,7 @@ from src.domain.value_objects.schedule_types import ScheduleTypes
 class ScheduleCreateRequest(BaseModel):
     name: str
     type_schedule: ScheduleTypes = ScheduleTypes.DAILY
-    desciption: Optional[str] = None
+    description: Optional[str] = None
     
     
 class ScheduleCreateResponse(BaseModel):
