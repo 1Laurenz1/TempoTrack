@@ -8,7 +8,7 @@ from typing import Optional
 class ScheduleRepository(ABC):
     
     @abstractmethod
-    async def create(self, schedule_info: Schedule) -> Optional[Schedule]:
+    async def create(self, schedule: Schedule) -> Optional[Schedule]:
         """Add a new schedule to the database. Returns the created schedule or None if failed"""
         ...
         

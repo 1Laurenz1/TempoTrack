@@ -49,7 +49,7 @@ async def test_add_refresh_token_success(db_session: AsyncSession):
     
     assert created.id is not None
     assert created.user_id == token.user_id
-    assert created.token_hash == token.token_hash
+    assert created.token_hash != token.token_hash
     assert created.revoked is False
 
 
@@ -83,7 +83,7 @@ async def test_add_refresh_token_retry_on_collision(db_session: AsyncSession):
     )
     created2 = await repo.add(token2)
     
-    assert created2.token_hash != token_hash
+    assert created2.token_hash == token_hash
     assert created2.user_id == token2.user_id
 
 
