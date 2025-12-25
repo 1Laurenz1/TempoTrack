@@ -12,6 +12,9 @@ from src.infrastructure.exceptions.infrastructure_error import (
 from src.infrastructure.exceptions.user_already_exists_error import (
     UserAlreadyExistsError
 )
+from src.infrastructure.exceptions.user_not_found_error import (
+    UserNotFoundError
+)
 from src.infrastructure.database.mappers.user_mapper import UserMapper
 
 from src.common.logging.logger_main import logger
@@ -110,11 +113,16 @@ class UserRepositoryImpl(UserRepository):
     
     async def increment_schedules_count(self, user_id: int) -> None:
         try:
-            await self.session.execute(
+            result = await self.session.execute(
                 update(UserModel)
                 .where(UserModel.id == user_id)
                 .values(schedules_count=UserModel.schedules_count + 1)
             )
+            
+            updated_user = result.scalar_one_or_none()
+            
+            if not updated_user:
+                raise UserNotFoundError(f"User with id {user_id} not found")
             
             await self.session.commit()
             
@@ -131,7 +139,7 @@ class UserRepositoryImpl(UserRepository):
         
     async def decrement_schedules_count(self, user_id: int) -> None:
         try:
-            await self.session.execute(
+            result = await self.session.execute(
                 update(UserModel)
                 .where(
                     UserModel.id == user_id,
@@ -140,11 +148,39 @@ class UserRepositoryImpl(UserRepository):
                 .values(schedules_count=UserModel.schedules_count - 1)
             )
             
-            await self.session.commit()
+            updated_user = result.scalar_one_or_none()
             
+            if not updated_user:
+                raise UserNotFoundError(f"User with id {user_id} not found")
+
+            await self.session.commit()
+
             logger.info(
                 f"The number of schedules for the user with user_id {user_id} has been reduced by 1"
             )
+        except SQLAlchemyError as e:
+            await self.session.rollback()
+            raise InfrastructureError("Database error") from e
+        
+        
+    async def set_main_schedule(
+        self,
+        user_id: int,
+        schedule_id: Optional[int],
+    ) -> None:
+        try:
+            updated_user = await self.session.execute(
+                update(UserModel)
+                .where(UserModel.id == user_id)
+                .values(main_schedule = schedule_id)
+            )
+            
+            updated_user = updated_user.scalar_one_or_none()
+            
+            if not updated_user:
+                raise UserNotFoundError(f"User with id {user_id} not found")
+            await self.session.commit()
+            logger.info(f"Set main_schedule={schedule_id} for user {user_id}")
         except SQLAlchemyError as e:
             await self.session.rollback()
             raise InfrastructureError("Database error") from e

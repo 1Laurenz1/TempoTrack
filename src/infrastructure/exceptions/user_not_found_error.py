@@ -1,0 +1,3 @@
+class UserNotFoundError(Exception):
+    """Used when the user is not found in the database"""
+    ...
