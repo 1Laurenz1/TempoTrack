@@ -4,7 +4,7 @@ TEST_STORAGE_FILE = docker_compose/test_storage.yaml
 
 .PHONY: test-storage
 test-storage:
-	${DC} -f ${TEST_STORAGE_FILE} up --build -
+	${DC} -f ${TEST_STORAGE_FILE} up --build -d
 
 
 .PHONY: drop-test-storage

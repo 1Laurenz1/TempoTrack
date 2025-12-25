@@ -103,9 +103,60 @@ The API will be available at:
 
 ---
 
-### 🧪 Running tests
+### 🐳 Docker & Docker Compose
+
+The project uses Docker Compose to run infrastructure services (databases and app containers).
+
+```text
+Main compose files
+docker_compose/
+├── app.yaml              # Main application (planned)
+├── storage.yaml          # Primary database (planned)
+└── test_storage.yaml     # Test database (used by pytest)
+```
+
+### **⚠️ Important:**
+Tests **never touch the main database.**
+A separate PostgreSQL container is started for running tests.
+
+### 🧪 Test Database
+To run tests successfully, a **test database must be running.**
+
+#### **Start the test database**
 ```bash
-poetry run pytest -q
+make test-storage
+```
+What happens:
+
+- PostgreSQL container from docker_compose/test_storage.yaml is started
+
+- Runs in **detached mode**
+
+- Used **only** for tests
+
+#### **Stop and remove the test database**
+```bash
+make drop-test-storage
+```
+This completely removes the test database container.
+
+⚠️ **Destructive operation**
+Use only for testing and local development.
+
+
+### 🧪 Running tests (with DB)
+
+Typical workflow:
+```bash
+make test-storage
+pytest
+make drop-test-storage
+```
+Or manually:
+```bash
+docker compose -f docker_compose/test_storage.yaml up --build -d
+pytest
+docker compose -f docker_compose/test_storage.yaml down
 ```
 
 Tests cover:
