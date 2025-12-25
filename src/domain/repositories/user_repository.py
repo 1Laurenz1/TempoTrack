@@ -24,6 +24,16 @@ class UserRepository(ABC):
         ...
         
     @abstractmethod
-    def add(self, user: User) -> Optional[User]:
+    async def add(self, user: User) -> Optional[User]:
         """Add a new user to the database. Returns the created User or None if failed."""
+        ...
+        
+    @abstractmethod
+    async def increment_schedules_count(self, user_id: int) -> Optional[User]:
+        """Increases the user's schedules by 1"""
+        ...
+        
+    @abstractmethod
+    async def decrement_schedules_count(self, user_id: int) -> Optional[User]:
+        """Decremens the user's charts by 1"""
         ...
