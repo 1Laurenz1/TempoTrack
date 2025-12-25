@@ -16,3 +16,9 @@ class ScheduleRepository(ABC):
     async def get_schedule_by_id(self, id: int) -> Optional[Schedule]:
         """Returns the schedule by id or None if not found"""
         ...
+        
+        
+    @abstractmethod
+    async def get_user_schedules(self, user_id: int) -> Optional[Schedule]:
+        """Returns the number of user's schedules"""
+        ...
