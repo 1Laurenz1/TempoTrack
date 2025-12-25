@@ -142,7 +142,7 @@ class UserRepositoryImpl(UserRepository):
             
             await self.session.commit()
             
-            await logger.info(
+            logger.info(
                 f"The number of schedules for the user with user_id {user_id} has been reduced by 1"
             )
         except SQLAlchemyError as e:
