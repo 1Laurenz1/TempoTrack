@@ -1,4 +1,4 @@
-from sqlalchemy import or_, select
+from sqlalchemy import or_, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 
@@ -106,3 +106,45 @@ class UserRepositoryImpl(UserRepository):
             await self.session.rollback()
             logger.error(f"An unknown error occurred in add with user {user}")
             raise InfrastructureError("Error reading from the database") from e
+        
+    
+    async def increment_schedules_count(self, user_id: int) -> None:
+        try:
+            await self.session.execute(
+                update(UserModel)
+                .where(UserModel.id == user_id)
+                .values(schedules_count=UserModel.schedules_count + 1)
+            )
+            
+            await self.session.commit()
+            
+            logger.info(
+                f"The number of schedules for the user with user_id {user_id} has been increased by 1"
+            )
+        except SQLAlchemyError as e:
+            await self.session.rollback()
+            logger.error(
+                f"An unknown error occurred in increment_schedules_count with user_id {user_id}"
+            )
+            raise InfrastructureError("Error reading from the database") from e
+        
+        
+    async def decrement_schedules_count(self, user_id: int) -> None:
+        try:
+            await self.session.execute(
+                update(UserModel)
+                .where(
+                    UserModel.id == user_id,
+                    UserModel.schedules_count > 0
+                )
+                .values(schedules_count=UserModel.schedules_count - 1)
+            )
+            
+            await self.session.commit()
+            
+            await logger.info(
+                f"The number of schedules for the user with user_id {user_id} has been reduced by 1"
+            )
+        except SQLAlchemyError as e:
+            await self.session.rollback()
+            raise InfrastructureError("Database error") from e

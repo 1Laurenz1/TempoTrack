@@ -29,11 +29,11 @@ class UserRepository(ABC):
         ...
         
     @abstractmethod
-    async def increment_schedules_count(self, user_id: int) -> Optional[User]:
+    async def increment_schedules_count(self, user_id: int) -> None:
         """Increases the user's schedules by 1"""
         ...
         
     @abstractmethod
-    async def decrement_schedules_count(self, user_id: int) -> Optional[User]:
-        """Decremens the user's charts by 1"""
+    async def decrement_schedules_count(self, user_id: int) -> None:
+        """Decremens the user's schedules by 1"""
         ...
