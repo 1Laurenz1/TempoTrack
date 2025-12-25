@@ -37,3 +37,8 @@ class UserRepository(ABC):
     async def decrement_schedules_count(self, user_id: int) -> None:
         """Decremens the user's schedules by 1"""
         ...
+        
+    @abstractmethod
+    async def set_main_schedule(self, user_id: int, schedule_id: int | None) -> None:
+        """Sets the specified schedule_id in main_schedule for the user"""
+        ...
