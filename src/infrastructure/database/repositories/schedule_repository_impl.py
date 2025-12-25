@@ -61,10 +61,18 @@ class ScheduleRepositoryImpl(ScheduleRepository):
         
         
     async def get_user_schedules(self, user_id: int) -> Optional[int]:
-        result = await self.session.execute(
-            select(func.count(ScheduleModel.id))
-            .select_from(ScheduleModel)
-            .where(ScheduleModel.user_id == user_id)
-        )
-        
-        return result.scalar_one_or_none()
+        try:
+            result = await self.session.execute(
+                select(func.count(ScheduleModel.id))
+                .select_from(ScheduleModel)
+                .where(ScheduleModel.user_id == user_id)
+            )
+            
+            schedules = result.scalar_one_or_none()
+            
+            if not schedules:
+                return None
+            return schedules
+        except SQLAlchemyError as e:
+            logger.error(f"Database error: {e}")
+            raise InfrastructureError("Error reading from the database") from e
