@@ -113,16 +113,11 @@ class UserRepositoryImpl(UserRepository):
     
     async def increment_schedules_count(self, user_id: int) -> None:
         try:
-            result = await self.session.execute(
+            await self.session.execute(
                 update(UserModel)
                 .where(UserModel.id == user_id)
                 .values(schedules_count=UserModel.schedules_count + 1)
             )
-            
-            updated_user = result.scalar_one_or_none()
-            
-            if not updated_user:
-                raise UserNotFoundError(f"User with id {user_id} not found")
             
             await self.session.commit()
             
@@ -139,7 +134,7 @@ class UserRepositoryImpl(UserRepository):
         
     async def decrement_schedules_count(self, user_id: int) -> None:
         try:
-            result = await self.session.execute(
+            await self.session.execute(
                 update(UserModel)
                 .where(
                     UserModel.id == user_id,
@@ -148,13 +143,8 @@ class UserRepositoryImpl(UserRepository):
                 .values(schedules_count=UserModel.schedules_count - 1)
             )
             
-            updated_user = result.scalar_one_or_none()
-            
-            if not updated_user:
-                raise UserNotFoundError(f"User with id {user_id} not found")
-
             await self.session.commit()
-
+            
             logger.info(
                 f"The number of schedules for the user with user_id {user_id} has been reduced by 1"
             )
