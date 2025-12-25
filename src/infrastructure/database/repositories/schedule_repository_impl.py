@@ -1,4 +1,4 @@
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 
@@ -58,3 +58,13 @@ class ScheduleRepositoryImpl(ScheduleRepository):
         except SQLAlchemyError as e:
             logger.error(f"Database error: {e}")
             raise InfrastructureError("Error reading from the database") from e
+        
+        
+    async def get_user_schedules(self, user_id: int) -> Optional[int]:
+        result = await self.session.execute(
+            select(func.count(ScheduleModel.id))
+            .select_from(ScheduleModel)
+            .where(ScheduleModel.user_id == user_id)
+        )
+        
+        return result.scalar_one_or_none()
