@@ -24,7 +24,7 @@ router = APIRouter()
     response_model=SetMainScheduleResponse,
     status_code=status.HTTP_200_OK
 )
-async def create_schedule(
+async def set_main_schedule(
     data: SetMainScheduleRequest,
     user_id: int = Depends(get_current_user_id),
     set_main_schedule_usecase: SetMainScheduleUseCase = Depends(get_set_main_schedule_usecase),
