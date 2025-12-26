@@ -1,4 +1,4 @@
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 
@@ -14,7 +14,7 @@ from src.infrastructure.database.mappers.schedule_mapper import ScheduleMapper
 from src.common.logging.logger_main import logger
 
 
-from typing import Optional
+from typing import List, Optional
 
 
 class ScheduleRepositoryImpl(ScheduleRepository):
@@ -55,6 +55,24 @@ class ScheduleRepositoryImpl(ScheduleRepository):
                 logger.info(f"Schedule by id {id} was found in the database!")
                 return ScheduleMapper.to_domain(schedule_model)
             return None
+        except SQLAlchemyError as e:
+            logger.error(f"Database error: {e}")
+            raise InfrastructureError("Error reading from the database") from e
+        
+        
+    async def get_user_schedules(self, user_id: int) -> List[int]:
+        try:
+            result = await self.session.execute(
+                select(func.count(ScheduleModel.id))
+                .select_from(ScheduleModel)
+                .where(ScheduleModel.user_id == user_id)
+            )
+            
+            schedules = result.scalars().all()
+            
+            if not schedules:
+                return None
+            return schedules
         except SQLAlchemyError as e:
             logger.error(f"Database error: {e}")
             raise InfrastructureError("Error reading from the database") from e

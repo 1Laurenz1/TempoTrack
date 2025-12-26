@@ -1,0 +1,3 @@
+class ScheduleNotFoundError(Exception):
+    """Called when the chart is not found"""
+    ...

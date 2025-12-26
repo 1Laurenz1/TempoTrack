@@ -24,6 +24,21 @@ class UserRepository(ABC):
         ...
         
     @abstractmethod
-    def add(self, user: User) -> Optional[User]:
+    async def add(self, user: User) -> Optional[User]:
         """Add a new user to the database. Returns the created User or None if failed."""
+        ...
+        
+    @abstractmethod
+    async def increment_schedules_count(self, user_id: int) -> None:
+        """Increases the user's schedules by 1"""
+        ...
+        
+    @abstractmethod
+    async def decrement_schedules_count(self, user_id: int) -> None:
+        """Decremens the user's schedules by 1"""
+        ...
+        
+    @abstractmethod
+    async def set_main_schedule(self, user_id: int, schedule_id: int | None) -> None:
+        """Sets the specified schedule_id in main_schedule for the user"""
         ...

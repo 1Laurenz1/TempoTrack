@@ -37,6 +37,8 @@ class CreateScheduleUseCase:
         )
 
         created = await self.schedule_repository.create(schedule)
+        
+        await self.user_repository.increment_schedules_count(user_id)
 
         return ScheduleCreateResponse(
             id=created.id,

@@ -94,3 +94,60 @@ async def test_get_schedule_by_id_not_found(db_session: AsyncSession):
     get_schedule = await schedule_repository.get_schedule_by_id(3)
     
     assert get_schedule is None
+    
+    
+@pytest.mark.asyncio
+async def test_get_user_schedules(db_session: AsyncSession):
+    schedule_repository = ScheduleRepositoryImpl(db_session)
+    user_repository = UserRepositoryImpl(db_session)
+    
+    user = User(
+        username="john",
+        email="john@example.com",
+        password=b"hashed-password",
+        first_name="John",
+        last_name="Doe",
+        tg_username="john_doe",
+        telegram_id=123456789,
+        schedules_count=1,
+        main_schedule=1
+    )
+
+    await user_repository.add(user)
+    
+    schedule = Schedule(
+        user_id=1,
+        id=1,
+        name="test_name",
+        description="First test schedule"
+    )
+    
+    await schedule_repository.create(schedule)
+    
+    user_schedules = await schedule_repository.get_user_schedules(user_id=1)
+    
+    assert user_schedules is not None
+    
+    
+@pytest.mark.asyncio
+async def test_get_user_schedules_none(db_session: AsyncSession):
+    schedule_repository = ScheduleRepositoryImpl(db_session)
+    user_repository = UserRepositoryImpl(db_session)
+    
+    user = User(
+        username="john",
+        email="john@example.com",
+        password=b"hashed-password",
+        first_name="John",
+        last_name="Doe",
+        tg_username="john_doe",
+        telegram_id=123456789,
+        schedules_count=1,
+        main_schedule=1
+    )
+
+    await user_repository.add(user)
+    
+    user_schedules = await schedule_repository.get_user_schedules(user_id=1)
+    
+    assert user_schedules is None
