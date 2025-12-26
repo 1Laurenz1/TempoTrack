@@ -1,0 +1,3 @@
+class InvalidInputError(Exception):
+    """Raised when input data is invalid or incomplete."""
+    ...

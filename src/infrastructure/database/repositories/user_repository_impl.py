@@ -157,20 +157,19 @@ class UserRepositoryImpl(UserRepository):
         self,
         user_id: int,
         schedule_id: Optional[int],
-    ) -> None:
+    ) -> bool:
         try:
-            updated_user = await self.session.execute(
+            result = await self.session.execute(
                 update(UserModel)
                 .where(UserModel.id == user_id)
-                .values(main_schedule = schedule_id)
+                .values(main_schedule=schedule_id)
+                .returning(UserModel.id)
             )
-            
-            updated_user = updated_user.scalar_one_or_none()
-            
-            if not updated_user:
-                raise UserNotFoundError(f"User with id {user_id} not found")
+
             await self.session.commit()
-            logger.info(f"Set main_schedule={schedule_id} for user {user_id}")
+
+            return result.scalar_one_or_none() is not None
+
         except SQLAlchemyError as e:
             await self.session.rollback()
             raise InfrastructureError("Database error") from e

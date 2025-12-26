@@ -1,0 +1,3 @@
+class AccessDeniedError(Exception):
+    """Raised when user tries to access a resource they don't own."""
+    ...

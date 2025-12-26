@@ -10,7 +10,6 @@ class ScheduleCreateRequest:
     name: str
     type_schedule: ScheduleTypes = ScheduleTypes.DAILY
     description: Optional[str] = None
-    
 
 
 @dataclass(slots=True)
@@ -20,3 +19,14 @@ class ScheduleCreateResponse:
     type_schedule: ScheduleTypes = ScheduleTypes.DAILY
     
     description: Optional[str] = None
+    
+    
+@dataclass
+class SetMainScheduleRequest:
+    schedule_id: int
+  
+    
+@dataclass
+class SetMainScheduleResponse:
+    schedule_id: int
+    schedule_name: int

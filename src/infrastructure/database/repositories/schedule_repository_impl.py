@@ -14,7 +14,7 @@ from src.infrastructure.database.mappers.schedule_mapper import ScheduleMapper
 from src.common.logging.logger_main import logger
 
 
-from typing import Optional
+from typing import List, Optional
 
 
 class ScheduleRepositoryImpl(ScheduleRepository):
@@ -60,7 +60,7 @@ class ScheduleRepositoryImpl(ScheduleRepository):
             raise InfrastructureError("Error reading from the database") from e
         
         
-    async def get_user_schedules(self, user_id: int) -> Optional[int]:
+    async def get_user_schedules(self, user_id: int) -> List[int]:
         try:
             result = await self.session.execute(
                 select(func.count(ScheduleModel.id))
@@ -68,7 +68,7 @@ class ScheduleRepositoryImpl(ScheduleRepository):
                 .where(ScheduleModel.user_id == user_id)
             )
             
-            schedules = result.scalar_one_or_none()
+            schedules = result.scalars().all()
             
             if not schedules:
                 return None
