@@ -6,6 +6,7 @@ from pathlib import Path
 
 class Settings(BaseSettings):
     DATABASE_URL: SecretStr
+    DEV_DATABASE_URL: SecretStr
     TEST_DATABASE_URL: SecretStr | None = None
     
     SECRET_KEY: SecretStr
