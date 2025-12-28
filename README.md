@@ -41,6 +41,9 @@ Key principles:
 - User registration
 - User authentication (login)
 - Password hashing and validation
+- Adding a new schedule
+- Change of the main schedule
+- Adding items to the schedule
 - JWT-based authentication:
   - access token (short-lived)
   - refresh token (stored securely)
@@ -68,7 +71,8 @@ cd TempoTrack
 Create a .env file (location depends on your setup, e.g. project root or config folder): recommended path: src\infrastructure\config\.env
 
 ```env
-DATABASE_URL=postgresql+asyncpg://user:password@localhost:5433/tempotrack
+DATABASE_URL=postgresql+asyncpg://user:password@localhost:5433/database_name
+DEV_DATABASE_URL=postgresql+asyncpg://user:password@localhost:5432/database_name
 TEST_DATABASE_URL=postgresql+asyncpg://postgres:test_db_passwd@localhost:5432/test_db
 
 SECRET_KEY = YOUR_SECRET_KEY
