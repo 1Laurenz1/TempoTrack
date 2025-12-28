@@ -2,7 +2,7 @@ services:
   fastapi:
     container_name: fastapi
     build: ..
-    command: poetry run uvicorn src.interfaces.web.main:create_app --factory --reload --host 0.0.0.0
+    command: poetry run uvicorn --factory src.interfaces.web.main:create_app --reload --reload-dir /app/src --reload-delay 1 --host 0.0.0.0 --port 8000
     ports:
       - "8000:8000"
     environment:
