@@ -8,6 +8,7 @@ from .auth import (
 from .schedules import (
     schedule_create,
     set_main_schedule,
+    add_item_schedule
 )
 
 
@@ -19,3 +20,4 @@ router.include_router(register.router, tags=["Auth"])
 router.include_router(login.router, tags=["Auth"])
 router.include_router(schedule_create.router, tags=["Schedules"])
 router.include_router(set_main_schedule.router, tags=["Schedules"])
+router.include_router(add_item_schedule.router, tags=["Schedules"])

@@ -12,6 +12,9 @@ from src.infrastructure.database.repositories.refresh_token_reposiotry_impl impo
 from src.infrastructure.database.repositories.schedule_repository_impl import (
     ScheduleRepositoryImpl
 )
+from src.infrastructure.database.repositories.schedule_items_repository_impl import (
+    ScheduleItemsRepositoryImpl
+)
 
 
 def get_user_repository(
@@ -30,3 +33,9 @@ def get_schedule_repository(
     session: AsyncSession = Depends(get_session),
 ) -> ScheduleRepositoryImpl:
     return ScheduleRepositoryImpl(session)
+
+
+def get_schedule_items_repository(
+    session: AsyncSession = Depends(get_session)
+) -> ScheduleItemsRepositoryImpl:
+    return ScheduleItemsRepositoryImpl(session)

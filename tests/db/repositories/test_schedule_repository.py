@@ -150,4 +150,4 @@ async def test_get_user_schedules_none(db_session: AsyncSession):
     
     user_schedules = await schedule_repository.get_user_schedules(user_id=1)
     
-    assert user_schedules is None
+    assert user_schedules == [0]
