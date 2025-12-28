@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from datetime import datetime
+from datetime import datetime, time
 from typing import Optional
 
 from src.domain.value_objects.day_of_week import DayOfWeek
@@ -35,8 +35,8 @@ class SetMainScheduleResponse:
 @dataclass(slots=True)
 class AddScheduleItemRequest:
     name: str
-    time_start: datetime
-    time_end: datetime
+    time_start: time
+    time_end: time
     description: Optional[str] = None
     day_of_week: Optional[DayOfWeek] = None
     
@@ -44,7 +44,7 @@ class AddScheduleItemRequest:
 @dataclass(slots=True)
 class AddScheduleItemResponse:
     name: str
-    time_start: datetime
-    time_end: datetime
+    time_start: time
+    time_end: time
     description: Optional[str] = None
     day_of_week: Optional[DayOfWeek] = None

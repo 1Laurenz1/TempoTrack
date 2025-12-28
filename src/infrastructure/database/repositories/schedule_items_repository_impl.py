@@ -38,7 +38,7 @@ class ScheduleItemsRepositoryImpl(ScheduleItemsRepository):
 
             logger.info(f"Schedule item(s) {orm_items} were successfully created")
 
-            return [ScheduleItemsMapper.to_domain(item) for item in orm_items]
+            return [ScheduleItemsMapper.to_domain(item, user_id) for item in orm_items]
         except IntegrityError as e:
             await self.session.rollback()
             logger.error(f"Integrity error while creating schedule item(s): {schedule_items}")

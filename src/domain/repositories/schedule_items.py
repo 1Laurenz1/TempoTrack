@@ -7,6 +7,6 @@ from typing import List
 
 class ScheduleItemsRepository(ABC):
     @abstractmethod
-    async def add(self, schedule_item: List[ScheduleItems]) -> List[ScheduleItems]:
+    async def add(self, schedule_item: List[ScheduleItems], user_id: int) -> List[ScheduleItems]:
         """Adds one or more schedule elements to the database"""
         ...

@@ -9,6 +9,7 @@ class ScheduleItems:
     """Represents a scheduled action with its timings, metadata, and optional weekday."""
 
     schedule_id: int
+    user_id: int
     time_start: time
     time_end: time
 

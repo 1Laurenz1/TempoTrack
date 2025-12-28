@@ -19,12 +19,13 @@ class ScheduleItemsMapper:
         )
 
     @staticmethod
-    def to_domain(item_model: ScheduleItemsModel) -> ScheduleItems:
+    def to_domain(item_model: ScheduleItemsModel, user_id: int) -> ScheduleItems:
         """
         Converts the ORM model ScheduleItemsModel into the domain entity ScheduleItems.
         """
         return ScheduleItems(
             id=item_model.id,
+            user_id=user_id,
             schedule_id=item_model.schedule_id,
             name=item_model.name,
             description=item_model.description if item_model.description else None,
