@@ -10,7 +10,6 @@ from src.application.dto.schedule import (
 )
 
 from src.application.exceptions.auth import (
-    UserIdNotFoundError,
     UserNotFoundError,
 )
 
