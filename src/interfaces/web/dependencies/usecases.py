@@ -5,6 +5,7 @@ from src.application.usecases.login_user import LoginUserUseCase
 from src.application.usecases.create_schedule import CreateScheduleUseCase
 from src.application.usecases.set_main_schedule import SetMainScheduleUseCase
 from src.application.usecases.add_item_schedule import AddScheduleItemUseCase
+from src.application.usecases.get_me_usecase import GetMeUseCase
 
 from .db import (
     get_user_repository,
@@ -74,4 +75,12 @@ async def get_add_item_schedule_item_usecase(
         user_repository=user_repository,
         schedule_items_repository=schedule_items_repository,
         schedule_repository=schedule_repository,
+    )
+    
+    
+async def get_users_me_usecase(
+    user_repository = Depends(get_user_repository)
+):
+    return GetMeUseCase(
+        user_repository=user_repository
     )

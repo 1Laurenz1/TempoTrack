@@ -10,6 +10,9 @@ from .schedules import (
     set_main_schedule,
     add_item_schedule
 )
+from .user import (
+    get_me
+)
 
 
 router = APIRouter()
@@ -21,3 +24,4 @@ router.include_router(login.router, tags=["Auth"])
 router.include_router(schedule_create.router, tags=["Schedules"])
 router.include_router(set_main_schedule.router, tags=["Schedules"])
 router.include_router(add_item_schedule.router, tags=["Schedules"])
+router.include_router(get_me.router, tags=["Users"])

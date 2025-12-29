@@ -21,7 +21,7 @@ router = APIRouter()
 
 
 @router.post(
-    "/schedules/{schedule_id}/items",
+    "/users/@me/schedules/{schedule_id}/items",
     response_model=list[AddScheduleItemResponse],
     status_code=status.HTTP_201_CREATED,
 )
