@@ -1,10 +1,12 @@
 from fastapi import Depends
 
+from src.application.usecases.get_my_schedules import GetMySchedulesUseCase
 from src.application.usecases.register_user import RegisterUserUseCase
 from src.application.usecases.login_user import LoginUserUseCase
 from src.application.usecases.create_schedule import CreateScheduleUseCase
 from src.application.usecases.set_main_schedule import SetMainScheduleUseCase
 from src.application.usecases.add_item_schedule import AddScheduleItemUseCase
+from src.application.usecases.get_me_usecase import GetMeUseCase
 
 from .db import (
     get_user_repository,
@@ -73,5 +75,23 @@ async def get_add_item_schedule_item_usecase(
     return AddScheduleItemUseCase(
         user_repository=user_repository,
         schedule_items_repository=schedule_items_repository,
+        schedule_repository=schedule_repository,
+    )
+    
+    
+async def get_users_me_usecase(
+    user_repository = Depends(get_user_repository)
+):
+    return GetMeUseCase(
+        user_repository=user_repository
+    )
+    
+
+async def get_my_schedules_usecase(
+    user_repository = Depends(get_user_repository),
+    schedule_repository = Depends(get_schedule_repository),
+):
+    return GetMySchedulesUseCase(
+        user_repository=user_repository,
         schedule_repository=schedule_repository,
     )

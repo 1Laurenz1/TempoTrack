@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 
 from src.domain.entities.schedule import Schedule
 
-from typing import Optional
+from typing import List, Optional
 
 
 class ScheduleRepository(ABC):
@@ -20,4 +20,9 @@ class ScheduleRepository(ABC):
     @abstractmethod
     async def get_user_schedules(self, user_id: int) -> int:
         """Returns the number of user's schedules"""
+        ...
+        
+    @abstractmethod
+    async def get_all_user_schedules(self, user_id: int) -> List[Schedule]:
+        """Returns the entities of user's schedules"""
         ...
