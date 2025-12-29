@@ -13,7 +13,7 @@ from src.interfaces.web.dependencies.usecases import get_users_me_usecase
 router = APIRouter()
 
 
-@router.post(
+@router.get(
     "/users/@me",
     status_code=status.HTTP_200_OK
 )
