@@ -9,6 +9,8 @@ class Settings(BaseSettings):
     DEV_DATABASE_URL: SecretStr
     TEST_DATABASE_URL: SecretStr | None = None
     
+    BOT_TOKEN: SecretStr
+    
     SECRET_KEY: SecretStr
     ALGORITHM: SecretStr = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
