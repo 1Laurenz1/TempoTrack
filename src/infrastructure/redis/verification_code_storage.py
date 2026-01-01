@@ -2,9 +2,6 @@ from typing import Optional
 from redis.asyncio import Redis
 
 from src.application.ports.verification_code_storage import VerificationCodeStorage
-from src.common.utils.get_verification_code import generate_verification_code
-
-
 
 
 class RedisVerificationCodeStorage(VerificationCodeStorage):
