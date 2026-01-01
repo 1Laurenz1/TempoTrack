@@ -23,7 +23,8 @@ dependencies = [
     "bcrypt (>=5.0.0,<6.0.0)",
     "email-validator (>=2.3.0,<3.0.0)",
     "httpx (>=0.28.1,<0.29.0)",
-    "alembic (>=1.17.2,<2.0.0)"
+    "alembic (>=1.17.2,<2.0.0)",
+    "redis (>=7.1.0,<8.0.0)"
 ]
 
 [build-system]
