@@ -9,7 +9,7 @@ class Settings(BaseSettings):
     DEV_DATABASE_URL: SecretStr
     TEST_DATABASE_URL: SecretStr | None = None
     
-    REDSIS_HOST: str = 'localhost'
+    REDIS_HOST: str = 'localhost'
     REDIS_PORT: int = 6379
     BOT_TOKEN: SecretStr
     
