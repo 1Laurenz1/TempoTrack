@@ -70,7 +70,6 @@ async def verify_code(
     The user enters the verification code they received in Telegram. 
     This endpoint checks the code against the stored value in Redis.
         
-    ⚠️ Note: This router is not fully finished and should be used carefully.
     """
     is_valid = await usecase.execute(entered_code=data.code, user_id=user_id)
 
