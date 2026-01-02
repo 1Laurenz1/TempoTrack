@@ -17,7 +17,7 @@ async def get_info_about_user(message: Message) -> UserInfo | None:
             "Please set a username in Telegram settings and try again."
         )
         logger.info(f"The user(user_id: {tg_id}) doesn't have a @username, returning...")
-        return None  # важно вернуть None, чтобы хендлер знал
+        return None
 
     user_info = UserInfo(
         tg_id=tg_id,

@@ -14,7 +14,7 @@ class SendVerificationCodeUseCase:
         self.storage = storage
         
         
-    async def execute(self, user_id: int):
+    async def execute(self, username: str, user_id: int):
         code = generate_verification_code()
         
         await self.storage.set_verification_code(
@@ -24,5 +24,6 @@ class SendVerificationCodeUseCase:
         
         await self.sender.send_verififaction_code(
             user_id=user_id,
+            username=username,
             code=code
         )
