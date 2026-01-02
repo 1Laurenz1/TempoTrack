@@ -7,9 +7,7 @@ from src.infrastructure.redis.verification_code_storage import (
 
 
 
-async def get_redis_verification_code_storage(
-        
-):
-    return RedisVerificationCodeStorage(
-        redis = Depends(get_redis_connection)
-    )
+async def get_redis_verification_code_storage():
+    redis = await get_redis_connection()
+    
+    return RedisVerificationCodeStorage(redis=redis)
