@@ -6,6 +6,7 @@ class TelegramSender(ABC):
     async def send_verififaction_code(
         self,
         user_id: int,
+        username: str,
         code: str
     ) -> None:
         ...
