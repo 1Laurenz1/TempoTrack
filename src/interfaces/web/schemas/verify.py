@@ -2,7 +2,7 @@ from pydantic import BaseModel
 
 
 class VerificationAccountRequest(BaseModel):
-    telegram_username: str
+    username: str
     
     
 class VerificationAccountResponse(BaseModel):
