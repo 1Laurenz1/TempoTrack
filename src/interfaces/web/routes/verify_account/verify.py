@@ -22,7 +22,7 @@ router = APIRouter()
     response_model=VerificationAccountResponse,
     status_code=status.HTTP_200_OK,
 )
-async def add_schedule_items(
+async def verify_account(
     data: VerificationAccountRequest,
     user_id: int = Depends(get_current_user_id),
 ):
@@ -34,7 +34,7 @@ async def add_schedule_items(
     response_model=VerifyCodeRequest,
     status_code=status.HTTP_200_OK,
 )
-async def add_schedule_items(
+async def verify_code(
     data: VerifyCodeResponse,
     user_id: int = Depends(get_current_user_id),
 ):

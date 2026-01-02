@@ -7,6 +7,9 @@ from src.application.usecases.create_schedule import CreateScheduleUseCase
 from src.application.usecases.set_main_schedule import SetMainScheduleUseCase
 from src.application.usecases.add_item_schedule import AddScheduleItemUseCase
 from src.application.usecases.get_me_usecase import GetMeUseCase
+from src.application.usecases.send_verification_code import (
+    SendVerificationCodeUseCase
+)
 
 from .db import (
     get_user_repository,
@@ -18,6 +21,12 @@ from .services import (
     get_password_service,
     get_refresh_token_service,
     get_jwt_service,
+)
+from .verify import (
+    get_telegram_sender_impl,
+)
+from .redis import (
+    get_redis_verification_code_storage,
 )
 
 
@@ -94,4 +103,15 @@ async def get_my_schedules_usecase(
     return GetMySchedulesUseCase(
         user_repository=user_repository,
         schedule_repository=schedule_repository,
+    )
+
+
+
+async def get_send_verification_code_usecase(
+    telegram_sender = Depends(get_telegram_sender_impl),
+    redis_verification_storage = Depends(get_redis_verification_code_storage)
+):
+    return SendVerificationCodeUseCase(
+        sender=telegram_sender,
+        storage=redis_verification_storage,
     )
