@@ -1,0 +1,17 @@
+from pydantic import BaseModel
+
+
+class VerificationAccountRequest(BaseModel):
+    telegram_username: str
+    
+    
+class VerificationAccountResponse(BaseModel):
+    message: str
+    
+    
+class VerifyCodeRequest(BaseModel):
+    code: str
+    
+    
+class VerifyCodeResponse(BaseModel):
+    success: bool
