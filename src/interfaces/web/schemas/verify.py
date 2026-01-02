@@ -15,3 +15,4 @@ class VerifyCodeRequest(BaseModel):
     
 class VerifyCodeResponse(BaseModel):
     success: bool
+    message: str

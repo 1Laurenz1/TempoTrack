@@ -11,8 +11,13 @@ from src.interfaces.web.schemas.verify import (
 from src.application.usecases.send_verification_code import (
     SendVerificationCodeUseCase
 )
+from src.application.usecases.verify_verification_code import (
+    VerifyVerificationCodeUseCase
+)
 
 from src.interfaces.web.dependencies.usecases import get_send_verification_code_usecase
+from src.interfaces.web.dependencies.usecases import get_verify_verification_code_usecase
+
 
 router = APIRouter()
 
@@ -51,13 +56,13 @@ async def verify_account(
 
 @router.post(
     "/users/@me/verify_code",
-    response_model=VerifyCodeRequest,
+    response_model=VerifyCodeResponse,
     status_code=status.HTTP_200_OK,
 )
 async def verify_code(
-    data: VerifyCodeResponse,
+    data: VerifyCodeRequest,
     user_id: int = Depends(get_current_user_id),
-    usecase: ... = Depends(...)
+    usecase: VerifyVerificationCodeUseCase = Depends(get_verify_verification_code_usecase)
 ):
     """
     Step 2: Verify the code entered by the user on the website.
@@ -67,7 +72,7 @@ async def verify_code(
         
     ⚠️ Note: This router is not fully finished and should be used carefully.
     """
-    is_valid = await usecase.execute(user_id=user_id, code=data.code)
+    is_valid = await usecase.execute(entered_code=data.code, user_id=user_id)
 
     if not is_valid:
         raise HTTPException(
@@ -75,6 +80,7 @@ async def verify_code(
             detail="Invalid verification code"
         )
 
-    return VerifyCodeRequest(
-        message="Verification successful"
+    return VerifyCodeResponse(
+        success=True,
+        message="verification successfull"
     )

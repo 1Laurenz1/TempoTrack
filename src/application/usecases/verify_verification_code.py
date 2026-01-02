@@ -23,21 +23,19 @@ class VerifyVerificationCodeUseCase:
     ) -> bool:
         stored_key = await self.storage.get_verify_code_by_user_id(user_id)
         
-        if not stored_key:
-            raise VerificationCodeNotFound(
-                "Verification code not found. The code may have expired"
-            )
-        
         if len(entered_code) != 6:
             raise InvalidVerificationCode(
                 "The code is not 6 characters long. Please enter the correct code."
             )
+        
+        if not stored_key:
+            raise VerificationCodeNotFound(
+                "Verification code not found. The code may have expired"
+            )
             
         is_valid = verify_verification_code(stored_key, entered_code)
         
-        if not is_valid:
-            raise InvalidVerificationCode("Invalid verification code")
-        
-        await self.storage.delete_code(user_id)
-        
-        return True
+        if is_valid:
+            await self.storage.delete_code(user_id)
+            return True
+        raise InvalidVerificationCode("Invalid verification code")

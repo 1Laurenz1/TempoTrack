@@ -10,7 +10,12 @@ from src.application.usecases.get_me_usecase import GetMeUseCase
 from src.application.usecases.send_verification_code import (
     SendVerificationCodeUseCase
 )
+from src.application.usecases.verify_verification_code import (
+    VerifyVerificationCodeUseCase
+)
+
 from src.infrastructure.redis.verification_code_storage import RedisVerificationCodeStorage
+
 from src.interfaces.bot.ports.telegram_sender_impl import TelegramSenderImpl
 
 from .db import (
@@ -111,9 +116,21 @@ async def get_my_schedules_usecase(
 
 async def get_send_verification_code_usecase(
     telegram_sender: TelegramSenderImpl = Depends(get_telegram_sender_impl),
-    redis_verification_storage: RedisVerificationCodeStorage = Depends(get_redis_verification_code_storage),
+    redis_verification_storage: RedisVerificationCodeStorage = Depends(
+        get_redis_verification_code_storage    
+    ),
 ) -> SendVerificationCodeUseCase:
     return SendVerificationCodeUseCase(
         sender=telegram_sender,
+        storage=redis_verification_storage,
+    )
+    
+    
+async def get_verify_verification_code_usecase(
+    redis_verification_storage: RedisVerificationCodeStorage = Depends(
+        get_redis_verification_code_storage    
+    ),
+) -> VerifyVerificationCodeUseCase:
+    return VerifyVerificationCodeUseCase(
         storage=redis_verification_storage,
     )
