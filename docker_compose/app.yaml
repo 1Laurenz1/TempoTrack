@@ -7,10 +7,14 @@ services:
       - "8000:8000"
     environment:
       DATABASE_URL: ${DATABASE_URL}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
     volumes:
       - ..:/app
     networks:
       - backend
+    depends_on:
+      - redis
 
 networks:
   backend:

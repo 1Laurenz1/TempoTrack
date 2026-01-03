@@ -1,0 +1,6 @@
+class InvalidVerificationCode(Exception):
+    ...
+
+
+class VerificationCodeNotFound(Exception):
+    ...

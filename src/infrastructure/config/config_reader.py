@@ -9,6 +9,8 @@ class Settings(BaseSettings):
     DEV_DATABASE_URL: SecretStr
     TEST_DATABASE_URL: SecretStr | None = None
     
+    REDIS_HOST: str = 'redis'
+    REDIS_PORT: int = 6379
     BOT_TOKEN: SecretStr
     
     SECRET_KEY: SecretStr

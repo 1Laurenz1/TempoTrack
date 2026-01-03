@@ -1,6 +1,9 @@
 from aiogram import Router
 from aiogram.types import Message
 from aiogram.filters import CommandStart
+from redis.asyncio import Redis
+
+from src.infrastructure.redis.redis_client import get_redis_connection
 
 from src.common.logging.logger_main import logger
 
@@ -12,20 +15,28 @@ router = Router()
 
 @router.message(CommandStart())
 async def cmd_start(message: Message) -> None:
-    #TODO: Send verification code
+    user_info = await get_info_about_user(message)
+    redis = await get_redis_connection()
     
-    user_info = get_info_about_user(message)
+    key = f"tg:username:{user_info.username}"
     
-    code = 123456
+    await redis.set(
+        name=key,
+        value=user_info.tg_id
+    )
+    logger.debug(
+        f"A new value was written to Redis: {key}/{user_info.tg_id}"
+    )
     
     await message.answer(
-        "👋 Hi! This is TempoTrack.\n\n"
-        "You’re almost done linking your account.\n\n"
-        "🔐 Your verification code:\n"
-        f"<b>{code}</b>\n\n"
-        "Enter this code on the website to confirm your Telegram account.\n\n"
-        "⚠️ The code is valid for a limited time.\n"
-        "If you didn’t request this, you can safely ignore this message."
+        "<b>👋 Hi! This is TempoTrack.</b>\n"
+        "To link your Telegram account with your website account:"
+        "1. Go to the website"
+        "2. Click 'Verify Account'"
+        "3. Enter your Telegram username"
+        "4. You'll receive a verification code here\n"
+        "<b>⚠️ Your username</b>: Laurenz5"
+        "(Use this exact username on the website, without @)"
     )
 
     

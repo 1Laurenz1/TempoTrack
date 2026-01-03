@@ -14,6 +14,7 @@ from .user import (
     get_me,
     get_my_schedules
 )
+from .verify_account import verify
 
 
 router = APIRouter()
@@ -27,3 +28,4 @@ router.include_router(set_main_schedule.router, tags=["Schedules"])
 router.include_router(add_item_schedule.router, tags=["Schedules"])
 router.include_router(get_me.router, tags=["Users"])
 router.include_router(get_my_schedules.router, tags=["Users"])
+router.include_router(verify.router, tags=["Verify"])

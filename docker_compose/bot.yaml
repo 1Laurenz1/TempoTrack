@@ -1,0 +1,17 @@
+services:
+  telegram_bot:
+    container_name: telegram_bot
+    build: ..
+    command: poetry run python -m src.interfaces.bot.main
+    environment:
+      BOT_TOKEN: ${BOT_TOKEN}
+      REDIS_HOST: redis
+    networks:
+      - backend
+    depends_on:
+      - redis
+
+
+networks:
+  backend:
+    driver: bridge
