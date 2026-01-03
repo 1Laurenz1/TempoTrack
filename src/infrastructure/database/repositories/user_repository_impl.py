@@ -173,3 +173,24 @@ class UserRepositoryImpl(UserRepository):
         except SQLAlchemyError as e:
             await self.session.rollback()
             raise InfrastructureError("Database error") from e
+        
+        
+    async def set_telegram_id(
+        self,
+        user_id: int,
+        telegram_id: int | None = None
+    ) -> None:
+        try:
+            result = await self.session.execute(
+                update(UserModel)
+                .where(UserModel.id == user_id)
+                .values(telegram_id=telegram_id)
+                .returning(UserModel.id)
+            )
+            
+            await self.session.commit()
+            
+            return result.scalar_one_or_none()
+        except SQLAlchemyError as e:
+            await self.session.rollback()
+            raise InfrastructureError("Database error") from e
