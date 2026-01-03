@@ -13,6 +13,9 @@ from src.application.usecases.send_verification_code import (
 from src.application.usecases.verify_verification_code import (
     VerifyVerificationCodeUseCase
 )
+from src.application.usecases.link_telegram_account_database import (
+    LinkTelegramAccountDatabaseUseCase
+)
 
 from src.infrastructure.redis.verification_code_storage import RedisVerificationCodeStorage
 
@@ -34,6 +37,7 @@ from .verify import (
 )
 from .redis import (
     get_redis_verification_code_storage,
+    get_redis_telegram_indetify_storage
 )
 
 
@@ -133,4 +137,16 @@ async def get_verify_verification_code_usecase(
 ) -> VerifyVerificationCodeUseCase:
     return VerifyVerificationCodeUseCase(
         storage=redis_verification_storage,
+    )
+    
+    
+async def get_link_user_account_database_usecase(
+    user_repository = Depends(get_user_repository),
+    storage = Depends(get_redis_telegram_indetify_storage),
+    sender = Depends(get_telegram_sender_impl)
+) -> LinkTelegramAccountDatabaseUseCase:
+    return LinkTelegramAccountDatabaseUseCase(
+        user_repository=user_repository,
+        storage=storage,
+        sender=sender
     )
