@@ -11,7 +11,7 @@ from src.common.utils.verify_code import verify_verification_code
 class VerifyVerificationCodeUseCase:
     def __init__(
         self,
-        storage: VerificationCodeStorage
+        storage: VerificationCodeStorage,
     ):
         self.storage = storage
         
