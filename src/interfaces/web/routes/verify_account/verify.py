@@ -14,9 +14,13 @@ from src.application.usecases.send_verification_code import (
 from src.application.usecases.verify_verification_code import (
     VerifyVerificationCodeUseCase
 )
+from src.application.usecases.link_telegram_account_database import (
+    LinkTelegramAccountDatabaseUseCase
+)
 
 from src.interfaces.web.dependencies.usecases import get_send_verification_code_usecase
 from src.interfaces.web.dependencies.usecases import get_verify_verification_code_usecase
+from src.interfaces.web.dependencies.usecases import get_link_user_account_database_usecase
 
 
 router = APIRouter()
@@ -62,7 +66,10 @@ async def verify_account(
 async def verify_code(
     data: VerifyCodeRequest,
     user_id: int = Depends(get_current_user_id),
-    usecase: VerifyVerificationCodeUseCase = Depends(get_verify_verification_code_usecase)
+    verify_code_usecase: VerifyVerificationCodeUseCase = Depends(get_verify_verification_code_usecase),
+    set_data_to_database_usecase: LinkTelegramAccountDatabaseUseCase = Depends(
+        get_link_user_account_database_usecase
+    )
 ):
     """
     Step 2: Verify the code entered by the user on the website.
@@ -71,13 +78,16 @@ async def verify_code(
     This endpoint checks the code against the stored value in Redis.
         
     """
-    is_valid = await usecase.execute(entered_code=data.code, user_id=user_id)
+    is_valid = await verify_code_usecase.execute(entered_code=data.code, user_id=user_id)
 
     if not is_valid:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Invalid verification code"
         )
+    await set_data_to_database_usecase.execute(
+        user_id=user_id,
+    )
 
     return VerifyCodeResponse(
         success=True,
