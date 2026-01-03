@@ -29,9 +29,6 @@ class LinkTelegramAccountDatabaseUseCase:
         if not telegram_username:
             raise ValueError("Telegram username is required")
 
-        # if not isinstance(telegram_id, int):
-            # raise ValueError("Telegram ID must be an integer")
-
         await self.user_repository.set_telegram_id(
             user_id=user_id,
             telegram_id=telegram_id
