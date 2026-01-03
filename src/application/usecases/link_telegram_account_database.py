@@ -4,7 +4,10 @@ from src.common.logging.logger_main import logger
 
 
 class LinkTelegramAccountDatabaseUseCase:
-    def __init__(self, user_repository: UserRepository):
+    def __init__(
+        self,
+        user_repository: UserRepository,
+    ):
         self.user_repository = user_repository
 
     async def execute(

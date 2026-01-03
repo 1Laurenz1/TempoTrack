@@ -49,11 +49,18 @@ class TelegramSenderImpl(TelegramSender):
 
         )
         
-        key = f"user:user_id:{user_id}"
+        key_user_user_id = f"user:user_id:{user_id}"
+        key_tg_id = f"user:user_id:{user_id}"
         await self.redis.set(
-            name=key,
+            name=key_user_user_id,
             value=telegram_id
         )
-        logger.debug(f"A new value was written to Redis: {key}/{telegram_id}")
+        logger.debug(f"A new value was written to Redis: {key_user_user_id}/{telegram_id}")
+        
+        await self.redis.set(
+            name=f"tg:id:{telegram_id}",
+            value=username
+        )
+        logger.debug(f"A new value was written to Redis: {key_tg_id}/{telegram_id}")
         
         logger.info(f"Message was sent succesffully to chat_id: {chat_id}(user_id: {user_id})")
