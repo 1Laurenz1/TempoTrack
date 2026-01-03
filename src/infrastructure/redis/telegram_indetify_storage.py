@@ -19,7 +19,7 @@ class RedisTelegramIndetifyStorage(TelegramIdentityStorage):
             name=f"user:user_id:{user_id}"
         )
         
-        return telegram_id if telegram_id else None
+        return int(telegram_id) if telegram_id else None
     
     
     async def get_telegram_username_by_user_id(
@@ -37,4 +37,4 @@ class RedisTelegramIndetifyStorage(TelegramIdentityStorage):
             name=f"tg:id:{telegram_id}"
         )
         
-        return tg_username if tg_username else None
+        return str(tg_username) if tg_username else None

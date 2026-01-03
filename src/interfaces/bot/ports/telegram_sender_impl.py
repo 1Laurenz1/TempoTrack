@@ -49,18 +49,48 @@ class TelegramSenderImpl(TelegramSender):
 
         )
         
-        key_user_user_id = f"user:user_id:{user_id}"
-        key_tg_id = f"user:user_id:{user_id}"
+        key_for_tg_id = f"user:user_id:{user_id}"
         await self.redis.set(
-            name=key_user_user_id,
+            name=key_for_tg_id,
             value=telegram_id
         )
-        logger.debug(f"A new value was written to Redis: {key_user_user_id}/{telegram_id}")
+        logger.debug(f"A new value was written to Redis: {key_for_tg_id}/{telegram_id}")
         
+        key_for_username = f"tg:id:{telegram_id}"
         await self.redis.set(
-            name=f"tg:id:{telegram_id}",
+            name=key_for_username,
             value=username
         )
-        logger.debug(f"A new value was written to Redis: {key_tg_id}/{telegram_id}")
+        logger.debug(f"A new value was written to Redis: {key_for_username}/{telegram_id}")
         
         logger.info(f"Message was sent succesffully to chat_id: {chat_id}(user_id: {user_id})")
+        
+
+    async def send_success_verification_message(
+        self,
+        user_id: int,
+        username: str
+    ) -> None:
+        telegram_id = await self.redis.get(
+            name=f"tg:username:{username}"
+        )
+
+        if not telegram_id:
+            raise ValueError("User never interacted with bot")
+
+        chat_obj = await self.bot.get_chat(chat_id=int(telegram_id))
+        chat_id = chat_obj.id
+        
+        await self.bot.send_message(
+            chat_id=chat_id,
+            text="✅ <b>Verification completed successfully!</b>\n\n"
+                "Your Telegram account is now linked to <b>TempoTrack</b>.\n\n"
+                "⏰ You’ll receive <b>schedule-based notifications</b> and "
+                "<b>reminders</b> here — exactly at the times you’ve set.\n\n"
+                "<i>You’re all set!</i>"
+        )
+        
+        logger.info(
+            f"A message confirming successful verification has been sent to chat_id: {chat_id}"
+            f"user_id({user_id})"
+        )
