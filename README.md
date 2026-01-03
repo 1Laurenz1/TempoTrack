@@ -44,6 +44,10 @@ Key principles:
 - Adding a new schedule
 - Change of the main schedule
 - Adding items to the schedule
+- Account verification via Telegram:
+  - One-time verification code generation
+  - Secure code delivery via Telegram bot
+  - Linking a Telegram account to a user profile
 - JWT-based authentication:
   - access token (short-lived)
   - refresh token (stored securely)
@@ -60,7 +64,7 @@ Key principles:
 
 ### 1️⃣ Clone the repository
 ```bash
-git clone https://github.com/your-username/TempoTrack.git
+git clone https://github.com/1Laurenz1/TempoTrack.git
 cd TempoTrack
 ```
 
@@ -71,9 +75,13 @@ cd TempoTrack
 Create a .env file (location depends on your setup, e.g. project root or config folder): recommended path: src\infrastructure\config\.env
 
 ```env
-DATABASE_URL=postgresql+asyncpg://user:password@localhost:5433/database_name
-DEV_DATABASE_URL=postgresql+asyncpg://user:password@localhost:5432/database_name
+DATABASE_URL=postgresql+asyncpg://USER:PASSWORD@HOST:PORT/DATABASE_NAME
+DEV_DATABASE_URL=postgresql+asyncpg://USER:PASSWORD@HOST:PORT/DATABASE_NAME
 TEST_DATABASE_URL=postgresql+asyncpg://postgres:test_db_passwd@localhost:5432/test_db
+
+REDIS_HOST=redis
+REDIS_PORT=6379
+BOT_TOKEN=YOUR_BOT_TOKEN
 
 SECRET_KEY = YOUR_SECRET_KEY
 ALGORITHM = "HS256"
@@ -96,32 +104,77 @@ poetry install
 ---
 
 ### 4️⃣ Run the FastAPI application
+You can run the backend in two ways: **via Makefile (recommended)** or **directly via Poetry**. Makefile ensures that all dependencies (like the database) are started automatically.
+
+**Option 1: Using Makefile (recommended)**
 ```bash
-poetry run uvicorn src.interfaces.web.main:create_app --factory --reload
+# Start all necessary services (database, redis, app, bot)
+make all
+
+# Optional: view logs for specific services
+make app-logs       # View FastAPI app logs
+make bot-logs       # View Telegram bot logs
+make storage-logs   # View database logs
+make redis-logs     # View redis logs
+
+# Stop all services when done
+make drop-all
 ```
+This approach is recommended because it automatically starts the main database and all services in the correct order.
+
 The API will be available at:
 
 - Swagger UI: http://localhost:8000/docs
 
 - OpenAPI JSON: http://localhost:8000/openapi.json
 
+
+**Option 2: Using Poetry directly**
+If you prefer to run the app manually, you must ensure that the main database is already running:
+```bash
+# Start the main database separately
+make storage
+
+# Run the FastAPI application directly
+poetry run uvicorn src.interfaces.web.main:create_app --factory --reload
+
+# Check the API:
+# Swagger UI: http://localhost:8000/docs
+# OpenAPI JSON: http://localhost:8000/openapi.json
+```
+
+⚠️ Important: The application **requires the database to be running**. Use make storage to start the database container before running the app with Poetry.
+
+
+**Notes**
+- For development, make all is usually the fastest way to start everything in the correct order.
+
+- You can follow logs in real-time using make <service>-logs.
+
+- After finishing work, clean up resources using make drop-all to stop and remove all containers.
+
 ---
 
 ### 🐳 Docker & Docker Compose
-
-The project uses Docker Compose to run infrastructure services (databases and app containers).
+The project uses Docker Compose to run infrastructure services (databases and app containers). The main compose files are located in the *docker_compose/* directory:
 
 ```text
-Main compose files
 docker_compose/
-├── app.yaml              # Main application (planned)
-├── storage.yaml          # Primary database (planned)
+├── app.yaml              # FastAPI application
+├── bot.yaml              # Telegram bot
+├── redis.yaml            # Redis database
+├── storage.yaml          # Primary database
 └── test_storage.yaml     # Test database (used by pytest)
 ```
 
 ### **⚠️ Important:**
-Tests **never touch the main database.**
-A separate PostgreSQL container is started for running tests.
+- Tests **never touch the main database**.
+
+- A separate PostgreSQL container is started for running tests.
+
+- Always use the test database container (*test_storage.yaml*) when running tests locally.
+
+---
 
 ### 🧪 Test Database
 To run tests successfully, a **test database must be running.**
@@ -130,31 +183,33 @@ To run tests successfully, a **test database must be running.**
 ```bash
 make test-storage
 ```
-What happens:
+This will:
 
-- PostgreSQL container from docker_compose/test_storage.yaml is started
+- Start a PostgreSQL container from *docker_compose/test_storage.yaml*
 
-- Runs in **detached mode**
+- Run in **detached mode**
 
-- Used **only** for tests
+- Be used only for tests
 
-#### **Stop and remove the test database**
+**View test database logs (optional)**
+
+```bash
+make test-storage-logs
+```
+
+**Stop and remove the test database**
 ```bash
 make drop-test-storage
 ```
-This completely removes the test database container.
 
-⚠️ **Destructive operation**
-Use only for testing and local development.
-
+⚠️ **Destructive operation**: This will completely remove the test database container. Use only for testing and local development.
 
 ### 🧪 Running tests (with DB)
-
 Typical workflow:
 ```bash
-make test-storage
-pytest
-make drop-test-storage
+make test-storage   # Start test database
+pytest              # Run tests
+make drop-test-storage  # Stop and remove test database
 ```
 Or manually:
 ```bash
@@ -176,14 +231,23 @@ Tests cover:
 ---
 
 ### 🤖 Telegram Bot (planned)
+The Telegram bot is **actively under development** and already partially implemented.
 
-The Telegram bot will:
+Currently implemented:
+- Telegram-based account verification for the website
 
-- notify users about scheduled tasks,
+- Secure linking of a Telegram account to a user profile
 
-- allow basic schedule management,
+- Integration with the backend via REST API
 
-- integrate with the same backend via API.
+Planned features:
+- Notifications about scheduled tasks
+
+- Reminders for routines and activities
+
+- Basic schedule management directly from Telegram
+
+The bot shares the same backend and authentication logic as the web application.
 
 **(Implementation in progress)**
 
