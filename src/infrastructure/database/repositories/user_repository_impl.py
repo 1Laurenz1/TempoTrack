@@ -209,6 +209,8 @@ class UserRepositoryImpl(UserRepository):
                 .returning(UserModel.id)
             )
             
+            await self.session.commit()
+            
             return result.scalar_one_or_none()
         except SQLAlchemyError as e:
             await self.session.rollback()
