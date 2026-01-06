@@ -9,6 +9,15 @@ celery_app = Celery(
     backend=settings.REDIS_URL.get_secret_value(),
 )
 
+celery_app.conf.update(
+    task_serializer="json",
+    accept_content=["json"],
+    result_serializer="json",
+    timezone="UTC",
+    enable_utc=True,
+    task_default_queue="default",
+)
+
 
 celery_app.autodiscover_tasks(
     ['src.infrastructure.celery']
