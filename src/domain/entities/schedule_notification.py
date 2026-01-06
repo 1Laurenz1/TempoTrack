@@ -1,15 +1,15 @@
 from dataclasses import dataclass, field
 from datetime import datetime, time, timezone
 
-from src.domain.value_objects.notification_status import NotificationStatus
+from src.domain.value_objects.notification_status import ScheduleNotificationStatus
 
 
 @dataclass
-class ScheduledNotification:
+class ScheduleNotification:
     user_id: int
     time_start: time
     time_end: time
-    status: NotificationStatus
+    status: ScheduleNotificationStatus
 
     payload: str = field(default_factory=str)
 
@@ -20,19 +20,19 @@ class ScheduledNotification:
     updated_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
 
     def mark_sent(self) -> None:
-        if self.status != NotificationStatus.PENDING:
+        if self.status != ScheduleNotificationStatus.PENDING:
             raise ValueError("Only pending notifications can be sent")
 
-        self.status = NotificationStatus.SENT
+        self.status = ScheduleNotificationStatus.SENT
 
     def mark_failed(self) -> None:
-        if self.status != NotificationStatus.PENDING:
+        if self.status != ScheduleNotificationStatus.PENDING:
             raise ValueError("Only pending notifications can fail")
 
-        self.status = NotificationStatus.FAILED
+        self.status = ScheduleNotificationStatus.FAILED
 
     def mark_canceled(self) -> None:
-        if self.status == NotificationStatus.SENT:
+        if self.status == ScheduleNotificationStatus.SENT:
             raise ValueError("Sent notification cannot be canceled")
 
-        self.status = NotificationStatus.CANCELED
+        self.status = ScheduleNotificationStatus.CANCELED
