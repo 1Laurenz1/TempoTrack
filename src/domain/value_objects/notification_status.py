@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class NotificationStatus(str, Enum):
+class ScheduledNotificationStatus(str, Enum):
     PENDING = "pending"
     SENT = "sent"
     FAILED = "failed"
