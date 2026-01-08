@@ -26,3 +26,8 @@ class ScheduleRepository(ABC):
     async def get_all_user_schedules(self, user_id: int) -> List[Schedule]:
         """Returns the entities of user's schedules"""
         ...
+        
+    @abstractmethod
+    async def get_user_main_schedule(self, user_id: int) -> Optional[Schedule]:
+        """Returns the main_schedule of user"""
+        ...
