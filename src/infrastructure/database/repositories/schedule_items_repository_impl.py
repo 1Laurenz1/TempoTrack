@@ -15,7 +15,7 @@ from src.infrastructure.exceptions.infrastructure_error import (
 
 from src.common.logging.logger_main import logger
 
-from typing import List
+from typing import List, Optional
 
 
 class ScheduleItemsRepositoryImpl(ScheduleItemsRepository):
@@ -46,5 +46,22 @@ class ScheduleItemsRepositoryImpl(ScheduleItemsRepository):
 
         except SQLAlchemyError as e:
             await self.session.rollback()
-            logger.error(f"An unknown error occurred in add with schedule_item(s): {schedule_items}")
+            logger.error(f"An unknown error occurred in add with schedule_item(s): {schedule_items}", exc_info=True)
+            raise InfrastructureError("Database error") from e
+        
+    
+    async def get_items_by_schedule_id(
+        self,
+        schedule_id: int,
+    ) -> list[ScheduleItemsModel]:
+        try:
+            result = await self.session.execute(
+                select(ScheduleItemsModel)
+                .where(ScheduleItemsModel.schedule_id == schedule_id)
+            )
+            schedule_items = result.scalars().all()
+            return schedule_items
+        except SQLAlchemyError as e:
+            await self.session.rollback()
+            logger.error(f"Error fetching schedule items for schedule_id={schedule_id}", exc_info=True)
             raise InfrastructureError("Database error") from e
