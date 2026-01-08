@@ -20,7 +20,7 @@ class ScheduleNotificationMapper:
         )
 
     @staticmethod
-    def to_model(entity: ScheduleNotification) -> ScheduleNotificationModel:
+    def to_orm(entity: ScheduleNotification) -> ScheduleNotificationModel:
         return ScheduleNotificationModel(
             id=entity.id,
             user_id=entity.user_id,

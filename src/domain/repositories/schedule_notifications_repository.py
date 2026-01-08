@@ -5,7 +5,7 @@ from src.domain.entities.schedule_notification import ScheduleNotification
 from typing import Optional
 
 
-class ScheduledNotificationRepository(ABC):
+class ScheduleNotificationRepository(ABC):
     @abstractmethod
     async def add(
         self,
