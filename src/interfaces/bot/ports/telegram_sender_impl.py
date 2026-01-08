@@ -1,5 +1,7 @@
 from aiogram import Bot
 
+from src.domain.entities.schedule_notification import ScheduleNotification
+
 from src.interfaces.bot.bot_init import bot
 
 from src.application.ports.telegram_sender import TelegramSender
@@ -20,14 +22,9 @@ class TelegramSenderImpl(TelegramSender):
     ):
         self.bot = bot
         self.redis = redis or get_redis_connection()
-        
-        
-    async def send_verififaction_code(
-        self,
-        user_id: int,
-        username: str,
-        code: str
-    ) -> None:
+
+
+    async def _get_chat_id(self, username: str) -> int:
         telegram_id = await self.redis.get(
             name=f"tg:username:{username}"
         )
@@ -35,8 +32,17 @@ class TelegramSenderImpl(TelegramSender):
         if not telegram_id:
             raise ValueError("User never interacted with bot")
 
-        chat_obj = await self.bot.get_chat(chat_id=int(telegram_id))
-        chat_id = chat_obj.id
+        chat = await self.bot.get_chat(chat_id=int(telegram_id))
+        return chat.id
+
+        
+    async def send_verififaction_code(
+        self,
+        user_id: int,
+        username: str,
+        code: str
+    ) -> None:
+        chat_id = await self._get_chat_id(username)
         
         await self.bot.send_message(
             chat_id=chat_id,
@@ -52,16 +58,16 @@ class TelegramSenderImpl(TelegramSender):
         key_for_tg_id = f"user:user_id:{user_id}"
         await self.redis.set(
             name=key_for_tg_id,
-            value=telegram_id
+            value=chat_id
         )
-        logger.debug(f"A new value was written to Redis: {key_for_tg_id}/{telegram_id}")
+        logger.debug(f"A new value was written to Redis: {key_for_tg_id}/{chat_id}")
         
-        key_for_username = f"tg:id:{telegram_id}"
+        key_for_username = f"tg:id:{chat_id}"
         await self.redis.set(
             name=key_for_username,
             value=username
         )
-        logger.debug(f"A new value was written to Redis: {key_for_username}/{telegram_id}")
+        logger.debug(f"A new value was written to Redis: {key_for_username}/{chat_id}")
         
         logger.info(f"Message was sent succesffully to chat_id: {chat_id}(user_id: {user_id})")
         
@@ -71,15 +77,7 @@ class TelegramSenderImpl(TelegramSender):
         user_id: int,
         username: str
     ) -> None:
-        telegram_id = await self.redis.get(
-            name=f"tg:username:{username}"
-        )
-
-        if not telegram_id:
-            raise ValueError("User never interacted with bot")
-
-        chat_obj = await self.bot.get_chat(chat_id=int(telegram_id))
-        chat_id = chat_obj.id
+        chat_id = await self._get_chat_id(username)
         
         await self.bot.send_message(
             chat_id=chat_id,
@@ -92,5 +90,29 @@ class TelegramSenderImpl(TelegramSender):
         
         logger.info(
             f"A message confirming successful verification has been sent to chat_id: {chat_id}"
+            f"user_id({user_id})"
+        )
+        
+    
+    async def send_notification_message(
+        self,
+        user_id: int, 
+        username: str,
+        notification: ScheduleNotification, 
+    ) -> None:
+        chat_id = await self._get_chat_id(username)
+        
+        await self.bot.send_message(
+            chat_id=chat_id,
+            text=(
+                "🔔 <b>Reminder</b>\n\n"
+                f"<b>{notification.time_start.strftime('%H:%M')}"
+                f"–{notification.time_end.strftime('%H:%M')}</b>\n"
+                f"{notification.payload}"
+            ),
+        )
+        
+        logger.info(
+            f"Reminder message successfully sent to chat_id: {chat_id}"
             f"user_id({user_id})"
         )
