@@ -85,6 +85,13 @@ class UserModel(Base, TimeStampMixin):
         back_populates="user"
     )
     
+    notifications: Mapped[List["ScheduleNotificationModel"]] = relationship(
+        "ScheduleNotificationModel",
+        back_populates="user",
+        cascade="all, delete-orphan",
+        passive_deletes=True,
+    )
+    
     
     @hybrid_property
     def is_active(self) -> bool:

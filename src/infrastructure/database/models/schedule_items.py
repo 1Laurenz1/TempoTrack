@@ -1,3 +1,4 @@
+from typing import List
 from sqlalchemy import (
     Integer,
     String,
@@ -74,6 +75,12 @@ class ScheduleItemsModel(Base, TimeStampMixin):
     
     user = relationship("UserModel", back_populates="items")
     
+    notifications: Mapped[List["ScheduleNotificationModel"]] = relationship(
+        "ScheduleNotificationModel",
+        back_populates="schedule_item",
+        cascade="all, delete-orphan",
+        passive_deletes=True,
+    )
     
     
     @hybrid_property
