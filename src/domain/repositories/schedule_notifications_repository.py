@@ -22,3 +22,12 @@ class ScheduleNotificationRepository(ABC):
     ) -> List[ScheduleNotification]:
         """Adds several objects for notifications"""
         ...
+        
+    
+    @abstractmethod
+    async def get_by_user_id(
+        self,
+        user_id: int,
+    ) -> List[ScheduleNotification]:
+        """Returns all notifications for the user"""
+        ...

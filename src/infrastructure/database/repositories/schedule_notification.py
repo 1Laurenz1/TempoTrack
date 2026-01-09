@@ -77,3 +77,15 @@ class ScheduleNotificationRepositoryImpl(ScheduleNotificationRepository):
                 exc_info=True,
             )
             raise InfrastructureError("Database error while creating notifications") from e
+        
+    
+    async def get_by_user_id(
+        self,
+        user_id: int,
+    ) -> List[ScheduleNotification]:
+        result = await self.session.execute(
+            select(ScheduleNotificationModel)
+            .where(ScheduleNotificationModel.user_id == user_id)
+        )
+        orm_notifications = result.scalars().all()
+        return [ScheduleNotificationMapper.to_domain(n) for n in orm_notifications]
