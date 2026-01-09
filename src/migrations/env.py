@@ -16,6 +16,7 @@ from src.infrastructure.database.models.user import UserModel
 from src.infrastructure.database.models.schedule import ScheduleModel
 from src.infrastructure.database.models.schedule_items import ScheduleItemsModel
 from src.infrastructure.database.models.refresh_token import RefreshTokenModel
+from src.infrastructure.database.models.schedule_notification import ScheduleNotificationModel
 from src.infrastructure.database.session import Base
 
 

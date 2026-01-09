@@ -1,11 +1,19 @@
-from datetime import time
 from sqlalchemy import Integer, String, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.dialects.postgresql import ENUM, TIME
 
 from src.infrastructure.database.session import Base
 from src.infrastructure.database.mixins.time_stamp_mixin import TimeStampMixin
+
 from src.domain.value_objects.notification_status import ScheduleNotificationStatus
+
+from datetime import time
+from typing import TYPE_CHECKING
+
+
+if TYPE_CHECKING:
+    from .user import UserModel
+    from .schedule_items import ScheduleItemsModel
 
 
 class ScheduleNotificationModel(Base, TimeStampMixin):
@@ -59,7 +67,7 @@ class ScheduleNotificationModel(Base, TimeStampMixin):
         "UserModel",
         back_populates="notifications",
     )
-    schedule_item: Mapped["ScheduleItemModel"] = relationship(
-        "ScheduleItemModel",
+    schedule_item: Mapped["ScheduleItemsModel"] = relationship(
+        "ScheduleItemsModel",
         back_populates="notifications",
     )

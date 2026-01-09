@@ -1,4 +1,3 @@
-from datetime import datetime
 from sqlalchemy import (
     Integer,
     ForeignKey,
@@ -10,7 +9,7 @@ from sqlalchemy.dialects.postgresql import BYTEA, BOOLEAN
 from src.infrastructure.database.session import Base
 from src.infrastructure.database.mixins.time_stamp_mixin import TimeStampMixin
 
-from src.domain.entities.refresh_token import RefreshToken
+from datetime import datetime
 
 
 class RefreshTokenModel(Base, TimeStampMixin):
