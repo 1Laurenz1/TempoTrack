@@ -2,15 +2,12 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.exc import SQLAlchemyError
 
-
 from src.domain.repositories.schedule_notifications_repository import (
     ScheduleNotificationRepository
 )
 from src.domain.entities.schedule_notification import ScheduleNotification
 
 from src.common.logging.logger_main import logger
-
-from typing import Optional
 
 from src.infrastructure.database.models.schedule_notification import (
     ScheduleNotificationModel
@@ -19,6 +16,8 @@ from src.infrastructure.database.mappers.schedule_notification_mapper import (
     ScheduleNotificationMapper
 )
 from src.infrastructure.exceptions.infrastructure_error import InfrastructureError
+
+from typing import Optional, List
 
 
 class ScheduleNotificationRepositoryImpl(ScheduleNotificationRepository):
@@ -46,4 +45,35 @@ class ScheduleNotificationRepositoryImpl(ScheduleNotificationRepository):
         except SQLAlchemyError as e:
             await self.session.rollback()
             logger.error(f"An unknown error occurred in add with schedule_notification {notification}")
-            raise InfrastructureError("Error reading from the database") from e
+            raise InfrastructureError("Database error while creating notification") from e
+        
+        
+    async def add_many(
+        self,
+        notifications: List[ScheduleNotification],
+    ) -> List[ScheduleNotification]:
+        try:
+            notifications_model = [
+                ScheduleNotificationMapper.to_orm(notification)
+                for notification in notifications
+            ]
+            
+            self.session.add_all(notifications_model)
+            await self.session.commit()
+            
+            for model in notifications_model:
+                await self.session.refresh(model)
+            
+            logger.info(f"Notifications {notifications_model}")
+            
+            return [
+                ScheduleNotificationMapper.to_domain(notification)
+                for notification in notifications_model
+            ]
+        except SQLAlchemyError as e:
+            await self.session.rollback()
+            logger.error(
+                f"Error while creating schedule_notifications: {notifications}",
+                exc_info=True,
+            )
+            raise InfrastructureError("Database error while creating notifications") from e
