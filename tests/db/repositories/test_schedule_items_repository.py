@@ -44,6 +44,7 @@ async def test_add_user_schedule_item_success(db_session: AsyncSession):
     created_schedule = await schedule_repo.create(schedule)
     
     schedule_item = ScheduleItems(
+        user_id=1,
         schedule_id=created_schedule.id,
         time_start=time(hour=8, minute=30),
         time_end=time(hour=9, minute=0),
@@ -85,6 +86,7 @@ async def test_add_some_user_schedule_item_success(db_session: AsyncSession):
     created_schedule = await schedule_repo.create(schedule)
     
     schedule_item1 = ScheduleItems(
+        user_id=1,
         schedule_id=created_schedule.id,
         time_start=time(hour=8, minute=30),
         time_end=time(hour=9, minute=0),
@@ -93,6 +95,7 @@ async def test_add_some_user_schedule_item_success(db_session: AsyncSession):
     )
     
     schedule_item2 = ScheduleItems(
+        user_id=1,
         schedule_id=created_schedule.id,
         time_start=time(hour=9, minute=0),
         time_end=time(hour=9, minute=30),

@@ -7,6 +7,7 @@ from src.domain.value_objects.day_of_week import DayOfWeek
 
 def test_scheduleitem_creation():
     schedule_item = ScheduleItems(
+        user_id=1,
         schedule_id=1,
         name="Walk",
         time_start=time(9,0),
@@ -25,6 +26,7 @@ def test_scheduleitem_creation():
 
 def test_schedule_item_duration():
     item = ScheduleItems(
+        user_id=1,
         schedule_id=1,
         time_start=time(12, 0),
         time_end=time(14, 30),
