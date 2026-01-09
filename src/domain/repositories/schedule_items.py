@@ -16,6 +16,7 @@ class ScheduleItemsRepository(ABC):
     async def get_items_by_schedule_id(
         self,
         schedule_id: int,
-    ) -> Optional[ScheduleItems]:
+        user_id: int
+    ) -> List[ScheduleItems]:
         """Returns all items that are in the schedule"""
         ...

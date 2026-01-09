@@ -15,7 +15,7 @@ from src.infrastructure.exceptions.infrastructure_error import (
 
 from src.common.logging.logger_main import logger
 
-from typing import List, Optional
+from typing import List
 
 
 class ScheduleItemsRepositoryImpl(ScheduleItemsRepository):
@@ -53,13 +53,16 @@ class ScheduleItemsRepositoryImpl(ScheduleItemsRepository):
     async def get_items_by_schedule_id(
         self,
         schedule_id: int,
-    ) -> list[ScheduleItemsModel]:
+        user_id: int
+    ) -> List[ScheduleItems]:
         try:
             result = await self.session.execute(
                 select(ScheduleItemsModel)
                 .where(ScheduleItemsModel.schedule_id == schedule_id)
             )
-            schedule_items = result.scalars().all()
+            schedule_items_orm = result.scalars().all()
+            schedule_items = [ScheduleItemsMapper.to_domain(item, user_id) for item in schedule_items_orm]
+            
             return schedule_items
         except SQLAlchemyError as e:
             await self.session.rollback()
