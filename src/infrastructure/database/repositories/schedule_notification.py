@@ -89,3 +89,29 @@ class ScheduleNotificationRepositoryImpl(ScheduleNotificationRepository):
         )
         orm_notifications = result.scalars().all()
         return [ScheduleNotificationMapper.to_domain(n) for n in orm_notifications]
+    
+    
+    async def get_by_id(
+        self,
+        notification_id: int,
+    ) -> Optional[ScheduleNotification]:
+        try:
+            result = await self.session.execute(
+                select(ScheduleNotificationModel)
+                .where(ScheduleNotificationModel.id == notification_id)
+            )
+            
+            orm_notification = result.scalar_one_or_none()
+            
+            if orm_notification is None:
+                return None
+            return ScheduleNotificationMapper.to_domain(orm_notification)
+        except SQLAlchemyError as e:
+            await self.session.rollback()
+            logger.error(
+                f"Error while retrieving notifications with notification_id: {notification_id}",
+                exc_info=True,
+            )
+            raise InfrastructureError(
+                f"Database error while retrieving notifications with notification_id: {notification_id}"    
+            ) from e

@@ -31,3 +31,12 @@ class ScheduleNotificationRepository(ABC):
     ) -> List[ScheduleNotification]:
         """Returns all notifications for the user"""
         ...
+        
+    
+    @abstractmethod
+    async def get_by_id(
+        self,
+        notifcation_id: int,
+    ) -> Optional[ScheduleNotification]:
+        """Returns a specific notification by id"""
+        ...
