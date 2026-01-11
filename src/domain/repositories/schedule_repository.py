@@ -31,3 +31,8 @@ class ScheduleRepository(ABC):
     async def get_user_main_schedule(self, user_id: int) -> Optional[Schedule]:
         """Returns the main_schedule of user"""
         ...
+        
+    @abstractmethod
+    async def get_all_users_with_main_schedule(self) -> List[int]:
+        """Returns all users(user_id) with a set main_schedule"""
+        ...
