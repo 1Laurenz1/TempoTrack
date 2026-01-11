@@ -36,7 +36,7 @@ class ScheduleNotificationRepository(ABC):
     @abstractmethod
     async def get_by_id(
         self,
-        notifcation_id: int,
+        notification_id: int,
     ) -> Optional[ScheduleNotification]:
         """Returns a specific notification by id"""
         ...
