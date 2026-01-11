@@ -1,0 +1,1 @@
+from .generate_notifications import _run

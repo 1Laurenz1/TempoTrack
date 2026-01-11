@@ -2,6 +2,7 @@ from celery import Celery
 
 from src.infrastructure.config.config_reader import settings
 
+from .beat import *
 
 celery_app = Celery(
     "tempotrack",
