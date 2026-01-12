@@ -40,3 +40,12 @@ class ScheduleNotificationRepository(ABC):
     ) -> Optional[ScheduleNotification]:
         """Returns a specific notification by id"""
         ...
+        
+    
+    @abstractmethod
+    async def delete(
+        self,
+        notification_id: int,
+    ) -> Optional[ScheduleNotification]:
+        """Deletes a specific notification by id"""
+        ...

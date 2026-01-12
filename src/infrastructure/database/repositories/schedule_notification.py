@@ -1,4 +1,4 @@
-from sqlalchemy import select
+from sqlalchemy import select, delete
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.exc import SQLAlchemyError
 
@@ -6,6 +6,9 @@ from src.domain.repositories.schedule_notifications_repository import (
     ScheduleNotificationRepository
 )
 from src.domain.entities.schedule_notification import ScheduleNotification
+from src.domain.value_objects.notification_status import (
+    ScheduleNotificationStatus
+)
 
 from src.common.logging.logger_main import logger
 
@@ -114,4 +117,37 @@ class ScheduleNotificationRepositoryImpl(ScheduleNotificationRepository):
             )
             raise InfrastructureError(
                 f"Database error while retrieving notifications with notification_id: {notification_id}"    
+            ) from e
+            
+    
+    async def delete(
+        self,
+        notification_id: int,
+    ) -> Optional[ScheduleNotification]:
+        try:
+            orm_notification = await self.session.get(
+                ScheduleNotificationModel, notification_id
+            )
+            
+            if not orm_notification:
+                return None
+            
+            deleted_notification = orm_notification
+            
+            await self.session.delete(deleted_notification)
+            await self.session.commit()
+            
+            logger.info(
+                f"Notification {orm_notification}({orm_notification.id}) was deleted successfully"
+            )
+            return ScheduleNotificationMapper.to_domain(orm_notification)
+            
+        except SQLAlchemyError as e:
+            await self.session.rollback()
+            logger.error(
+                f"Error deleting notification {notification_id}",
+                exc_info=True
+            )
+            raise InfrastructureError(
+                f"Database error deleting notification {notification_id}"
             ) from e

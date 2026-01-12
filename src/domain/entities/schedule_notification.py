@@ -24,15 +24,18 @@ class ScheduleNotification:
             raise ValueError("Only pending notifications can be sent")
 
         self.status = ScheduleNotificationStatus.SENT
+        self.updated_at = datetime.now(timezone.utc)
 
     def mark_failed(self) -> None:
         if self.status != ScheduleNotificationStatus.PENDING:
             raise ValueError("Only pending notifications can fail")
 
         self.status = ScheduleNotificationStatus.FAILED
+        self.updated_at = datetime.now(timezone.utc)
 
     def mark_canceled(self) -> None:
         if self.status == ScheduleNotificationStatus.SENT:
             raise ValueError("Sent notification cannot be canceled")
 
         self.status = ScheduleNotificationStatus.CANCELED
+        self.updated_at = datetime.now(timezone.utc)
