@@ -1,0 +1,22 @@
+services:
+  celery_beat:
+    build: ..
+    container_name: celery_beat
+    command: celery -A src.infrastructure.celery.app.celery_app beat --loglevel=info
+    depends_on:
+      - redis
+    environment:
+      CELERY_BROKER_URL: ${CELERY_BROKER_URL}
+      CELERY_RESULT_BACKEND: ${CELERY_RESULT_BACKEND}
+    volumes:
+      - celery_beat_data:/data
+    networks:
+      - backend
+
+volumes:
+  celery_worker_data:
+  celery_beat_data:
+
+networks:
+  backend:
+    driver: bridge
