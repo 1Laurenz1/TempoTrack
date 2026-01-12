@@ -1,0 +1,3 @@
+class InvalidNotificationStatusError(Exception):
+    """Called when the notification is in an inappropriate status for the operation."""
+    ...

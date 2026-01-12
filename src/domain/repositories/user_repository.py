@@ -53,3 +53,9 @@ class UserRepository(ABC):
     async def set_telegram_username(self, user_id: int, telegram_username: str | None) -> None:
         """Sets the telegram_username for the user"""
         ...
+        
+    
+    @abstractmethod
+    async def get_user_tg_username(self, user_id: int) -> Optional[str]:
+        """Returns the user Telegram username or None if none"""
+        ...

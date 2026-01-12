@@ -10,9 +10,13 @@ from sqlalchemy.dialects.postgresql import BYTEA
 from src.infrastructure.database.session import Base
 from src.infrastructure.database.mixins.time_stamp_mixin import TimeStampMixin
 
-from src.domain.entities.user import User
+from typing import Optional, List, TYPE_CHECKING
 
-from typing import Optional, List
+
+if TYPE_CHECKING:
+    from .schedule import ScheduleModel
+    from .schedule_items import ScheduleItemsModel
+    from .schedule_notification import ScheduleNotificationModel
 
 
 class UserModel(Base, TimeStampMixin):
@@ -83,6 +87,12 @@ class UserModel(Base, TimeStampMixin):
     
     items: Mapped[List["ScheduleItemsModel"]] = relationship(
         back_populates="user"
+    )
+    
+    notifications: Mapped[List["ScheduleNotificationModel"]] = relationship(
+        "ScheduleNotificationModel",
+        back_populates="user",
+        cascade="all, delete-orphan",
     )
     
     

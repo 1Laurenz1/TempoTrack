@@ -14,7 +14,7 @@ services:
       - pgdata:/var/lib/postgresql/data
     networks:
       - backend
-    
+
 volumes:
   pgdata:
 

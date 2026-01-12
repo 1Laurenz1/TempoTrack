@@ -1,4 +1,3 @@
-from typing import List
 from sqlalchemy import (
     Integer,
     String,
@@ -8,12 +7,21 @@ from sqlalchemy import (
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.dialects.postgresql import ENUM
 
+from src.domain.entities.schedule_items import ScheduleItems
+from src.domain.value_objects.day_of_week import DayOfWeek
+
 from src.infrastructure.database.session import Base
 from src.infrastructure.database.mixins.time_stamp_mixin import TimeStampMixin
 
-from src.domain.entities.schedule import Schedule
-
 from src.domain.value_objects.schedule_types import ScheduleTypes
+
+from datetime import date
+from typing import List, TYPE_CHECKING
+
+
+if TYPE_CHECKING:
+    from .user import UserModel
+    from .schedule_items import ScheduleItemsModel
 
 
 class ScheduleModel(Base, TimeStampMixin):
@@ -59,3 +67,29 @@ class ScheduleModel(Base, TimeStampMixin):
         back_populates="schedule",
         cascade="all, delete-orphan"
     )
+    
+    
+    def is_item_active_on_date(
+        self,
+        item: "ScheduleItems",
+        day: date,
+    ) -> bool:
+        if self.type_schedule == ScheduleTypes.DAILY:
+            return True
+        
+        if self.type_schedule == ScheduleTypes.WEEKLY:
+            if item.day_of_week is None:
+                return False
+            
+            weekday_map = {
+                0: DayOfWeek.MONDAY,
+                1: DayOfWeek.TUESDAY,
+                2: DayOfWeek.WEDNESDAY,
+                3: DayOfWeek.THURSDAY,
+                4: DayOfWeek.FRIDAY,
+                5: DayOfWeek.SATURDAY,
+                6: DayOfWeek.SUNDAY,
+            }
+            
+            return weekday_map[day.weekday()] == item.day_of_week
+        return False

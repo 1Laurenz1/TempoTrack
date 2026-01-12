@@ -11,6 +11,8 @@ class Settings(BaseSettings):
     
     REDIS_HOST: str = 'redis'
     REDIS_PORT: int = 6379
+    REDIS_URL: SecretStr
+    
     BOT_TOKEN: SecretStr
     
     SECRET_KEY: SecretStr

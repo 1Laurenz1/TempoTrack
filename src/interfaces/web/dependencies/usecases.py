@@ -123,10 +123,12 @@ async def get_send_verification_code_usecase(
     redis_verification_storage: RedisVerificationCodeStorage = Depends(
         get_redis_verification_code_storage    
     ),
+    schedule_repo = Depends(get_schedule_repository)
 ) -> SendVerificationCodeUseCase:
     return SendVerificationCodeUseCase(
         sender=telegram_sender,
         storage=redis_verification_storage,
+        schedule_repo=schedule_repo,
     )
     
     

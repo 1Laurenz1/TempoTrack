@@ -1,0 +1,3 @@
+class NoScheduleItemsError(Exception):
+    """Called when no schedule_items are found in the schedule"""
+    ...

@@ -11,11 +11,15 @@ from sqlalchemy.ext.hybrid import hybrid_property
 from src.infrastructure.database.session import Base
 from src.infrastructure.database.mixins.time_stamp_mixin import TimeStampMixin
 
-from src.domain.entities.schedule_items import ScheduleItems
-
 from src.domain.value_objects.day_of_week import DayOfWeek
 
 from datetime import datetime, time
+from typing import List, TYPE_CHECKING
+
+
+if TYPE_CHECKING:
+    from .schedule import ScheduleModel
+    from .schedule_notification import ScheduleNotificationModel    
 
 
 class ScheduleItemsModel(Base, TimeStampMixin):
@@ -74,6 +78,11 @@ class ScheduleItemsModel(Base, TimeStampMixin):
     
     user = relationship("UserModel", back_populates="items")
     
+    notifications: Mapped[List["ScheduleNotificationModel"]] = relationship(
+        "ScheduleNotificationModel",
+        back_populates="schedule_item",
+        cascade="all, delete-orphan",
+    )
     
     
     @hybrid_property

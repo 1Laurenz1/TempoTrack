@@ -1,0 +1,51 @@
+from abc import ABC, abstractmethod
+
+from src.domain.entities.schedule_notification import ScheduleNotification
+
+from typing import Optional, List
+
+
+class ScheduleNotificationRepository(ABC):
+    @abstractmethod
+    async def add(
+        self,
+        notification: ScheduleNotification
+    ) -> Optional[ScheduleNotification]:
+        """Adds a new object for notification"""
+        ...
+        
+        
+    @abstractmethod
+    async def add_many(
+        self,
+        notifications: List[ScheduleNotification]
+    ) -> List[ScheduleNotification]:
+        """Adds several objects for notifications"""
+        ...
+        
+    
+    @abstractmethod
+    async def get_by_user_id(
+        self,
+        user_id: int,
+    ) -> List[ScheduleNotification]:
+        """Returns all notifications for the user"""
+        ...
+        
+    
+    @abstractmethod
+    async def get_by_id(
+        self,
+        notification_id: int,
+    ) -> Optional[ScheduleNotification]:
+        """Returns a specific notification by id"""
+        ...
+        
+    
+    @abstractmethod
+    async def delete(
+        self,
+        notification_id: int,
+    ) -> Optional[ScheduleNotification]:
+        """Deletes a specific notification by id"""
+        ...

@@ -215,3 +215,28 @@ class UserRepositoryImpl(UserRepository):
         except SQLAlchemyError as e:
             await self.session.rollback()
             raise InfrastructureError("Database error") from e
+        
+        
+    async def get_user_tg_username(self, user_id: int) -> Optional[str]:
+        try:
+            result = await self.session.execute(
+                select(UserModel.tg_username)
+                .where(
+                    (UserModel.id == user_id) & 
+                    (~UserModel.tg_username.is_(None))
+                )
+            )
+            
+            tg_username = result.scalar_one_or_none()
+            
+            if tg_username is None:
+                logger.info(f"No tg_username found for user_id: {user_id}")
+                return None
+            logger.info(f"tg_username found for user user_id: {user_id}")
+            return tg_username
+        except SQLAlchemyError as e:
+            await self.session.rollback()
+            logger.error(
+                f"An unknown error occurred in get_user_tg_username with user_id {user_id}"
+            )
+            raise InfrastructureError("Database error in get_user_tg_username")from e

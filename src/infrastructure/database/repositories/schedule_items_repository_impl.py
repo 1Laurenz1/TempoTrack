@@ -46,5 +46,25 @@ class ScheduleItemsRepositoryImpl(ScheduleItemsRepository):
 
         except SQLAlchemyError as e:
             await self.session.rollback()
-            logger.error(f"An unknown error occurred in add with schedule_item(s): {schedule_items}")
+            logger.error(f"An unknown error occurred in add with schedule_item(s): {schedule_items}", exc_info=True)
+            raise InfrastructureError("Database error") from e
+        
+    
+    async def get_items_by_schedule_id(
+        self,
+        schedule_id: int,
+        user_id: int
+    ) -> List[ScheduleItems]:
+        try:
+            result = await self.session.execute(
+                select(ScheduleItemsModel)
+                .where(ScheduleItemsModel.schedule_id == schedule_id)
+            )
+            schedule_items_orm = result.scalars().all()
+            schedule_items = [ScheduleItemsMapper.to_domain(item, user_id) for item in schedule_items_orm]
+            
+            return schedule_items
+        except SQLAlchemyError as e:
+            await self.session.rollback()
+            logger.error(f"Error fetching schedule items for schedule_id={schedule_id}", exc_info=True)
             raise InfrastructureError("Database error") from e

@@ -12,11 +12,14 @@ BASE_DIR = Path(__file__).resolve().parents[2]
 sys.path.append(str(BASE_DIR))
 
 from src.infrastructure.config.config_reader import settings
+
+from src.infrastructure.database.session import Base
+
 from src.infrastructure.database.models.user import UserModel
 from src.infrastructure.database.models.schedule import ScheduleModel
 from src.infrastructure.database.models.schedule_items import ScheduleItemsModel
 from src.infrastructure.database.models.refresh_token import RefreshTokenModel
-from src.infrastructure.database.session import Base
+from src.infrastructure.database.models.schedule_notification import ScheduleNotificationModel
 
 
 config = context.config

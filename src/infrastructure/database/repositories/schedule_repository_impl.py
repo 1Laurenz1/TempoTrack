@@ -6,6 +6,7 @@ from src.domain.repositories.schedule_repository import ScheduleRepository
 from src.domain.entities.schedule import Schedule
 
 from src.infrastructure.database.models.schedule import ScheduleModel
+from src.infrastructure.database.models.user import UserModel
 from src.infrastructure.exceptions.infrastructure_error import (
     InfrastructureError
 )
@@ -101,3 +102,36 @@ class ScheduleRepositoryImpl(ScheduleRepository):
         except SQLAlchemyError as e:
             logger.error(f"Database error: {e}")
             raise InfrastructureError("Error reading from the database") from e
+        
+
+    async def get_user_main_schedule(self, user_id: int) -> Optional[Schedule]:
+        try:
+            result = await self.session.execute(
+                select(ScheduleModel)
+                .join(UserModel, UserModel.main_schedule == ScheduleModel.id)
+                .where(UserModel.id == user_id)
+            )
+
+            schedule = result.scalar_one_or_none()
+            
+            if schedule is None:
+                return None
+            return schedule
+        except SQLAlchemyError as e:
+            logger.error(f"Database error: {e}")
+            raise InfrastructureError("Error reading from the database") from e
+        
+        
+    async def get_all_users_with_main_schedule(self) -> List[int]:
+        try:
+            result = await self.session.execute(
+                select(UserModel.id)
+                .where(~UserModel.main_schedule.is_(None))
+            )
+            
+            return result.scalars().all()
+        except SQLAlchemyError as e:
+            logger.error(f"Database error: {e}")
+            raise InfrastructureError(
+                "Error reading from the database in get_all_users_with_main_schedule"    
+            ) from e
