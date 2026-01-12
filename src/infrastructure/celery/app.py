@@ -1,8 +1,8 @@
 from celery import Celery
+from celery.schedules import schedule
 
 from src.infrastructure.config.config_reader import settings
 
-from .beat import *
 
 celery_app = Celery(
     "tempotrack",
@@ -20,6 +20,19 @@ celery_app.conf.update(
 )
 
 
+celery_app.conf.beat_schedule.update({
+    "check-notifications-every-10-seconds": {
+        "task": "tasks.generate_schedule_notifications",
+        "schedule": schedule(10.0),
+    },
+})
+
+
 celery_app.autodiscover_tasks(
-    ['src.infrastructure.celery']
+    ['src.infrastructure.celery.tasks']
 )
+
+
+
+import src.infrastructure.celery.tasks.generate_schedule_notifications
+import src.infrastructure.celery.tasks.send_schedule_notification
