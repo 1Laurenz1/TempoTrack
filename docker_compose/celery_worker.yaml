@@ -1,0 +1,19 @@
+services:
+  celery_worker:
+    build: ..
+    container_name: celery_worker
+    command: celery -A src.infrastructure.celery.app.celery_app worker --loglevel=info
+    depends_on:
+      - redis
+    environment:
+      CELERY_BROKER_URL: ${CELERY_BROKER_URL}
+      CELERY_RESULT_BACKEND: ${CELERY_RESULT_BACKEND}
+      DATABASE_URL: ${DATABASE_URL}
+    volumes:
+      - celery_worker_data:/data
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge
