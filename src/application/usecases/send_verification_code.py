@@ -21,7 +21,7 @@ class SendVerificationCodeUseCase:
         
     async def execute(self, username: str, user_id: int):
         code = generate_verification_code()
-        has_main_schedule = self.schedule_repo.get_user_main_schedule(user_id)
+        has_main_schedule = await self.schedule_repo.get_user_main_schedule(user_id)
         
         if not has_main_schedule:
             raise MainScheduleNotSetError(

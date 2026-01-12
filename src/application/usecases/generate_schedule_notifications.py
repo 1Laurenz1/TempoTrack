@@ -10,6 +10,8 @@ from src.domain.value_objects.notification_status import ScheduleNotificationSta
 from src.application.exceptions.schedule import MainScheduleNotSetError
 from src.application.exceptions.schedule_items import NoScheduleItemsError
 
+from src.common.logging.logger_main import logger
+
 from datetime import datetime, timezone
 from typing import List
 
@@ -29,8 +31,9 @@ class GenerateScheduleNotificationsUseCase:
     async def execute(
         self,
         user_id: int,
-    ) -> bool:
+    ) -> List[ScheduleNotification]:
         main_schedule = await self.schedule_repo.get_user_main_schedule(user_id)
+        logger.info(f"User {user_id} main schedule id={main_schedule.id}")
         
         if not main_schedule:
             raise MainScheduleNotSetError("User has not selected a main schedule")
@@ -61,5 +64,7 @@ class GenerateScheduleNotificationsUseCase:
                 )
         
         if notifications:
-            await self.schedule_notification_repo.add_many(notifications)
-            return True
+            notifications = await self.schedule_notification_repo.add_many(notifications)
+            logger.info(f"Will generate {len(notifications)} notifications")
+            
+            return notifications
