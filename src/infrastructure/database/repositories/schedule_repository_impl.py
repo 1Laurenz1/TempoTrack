@@ -125,7 +125,7 @@ class ScheduleRepositoryImpl(ScheduleRepository):
     async def get_all_users_with_main_schedule(self) -> List[int]:
         try:
             result = await self.session.execute(
-                select(UserModel)
+                select(UserModel.id)
                 .where(~UserModel.main_schedule.is_(None))
             )
             
