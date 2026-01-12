@@ -48,4 +48,3 @@ async def generate_schedule_notifications_task():
 def generate_schedule_notifications():
     loop = asyncio.get_event_loop()
     loop.run_until_complete(generate_schedule_notifications_task())
-    # asyncio.run(generate_schedule_notifications_task())

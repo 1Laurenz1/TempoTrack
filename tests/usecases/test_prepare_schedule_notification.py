@@ -1,7 +1,7 @@
 import pytest
 from datetime import datetime, time, timedelta, timezone
 
-from src.application.usecases.send_schedule_notification import (
+from src.application.usecases.prepare_schedule_notification import (
     PrepareScheduleNotificationUseCase
 )
 
