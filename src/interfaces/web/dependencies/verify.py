@@ -9,5 +9,5 @@ async def get_telegram_sender_impl() -> TelegramSenderImpl:
     redis = await get_redis_connection()
     
     return TelegramSenderImpl(
-        redis=redis,
+        # redis=redis,
     )

@@ -18,20 +18,23 @@ class TelegramSenderImpl(TelegramSender):
     def __init__(
         self,
         bot: Bot = bot,
-        redis: Redis | None = None,
+        # redis: Redis | None = None,
     ):
         self.bot = bot
-        self.redis = redis or get_redis_connection()
+        self.redis: Redis | None = None
+
+
+    async def get_redis(self) -> Redis:
+        if not self.redis:
+            self.redis = await get_redis_connection()
+        return self.redis
 
 
     async def _get_chat_id(self, username: str) -> int:
-        telegram_id = await self.redis.get(
-            name=f"tg:username:{username}"
-        )
-
+        redis = await self.get_redis()
+        telegram_id = await redis.get(f"tg:username:{username}")
         if not telegram_id:
             raise ValueError("User never interacted with bot")
-
         chat = await self.bot.get_chat(chat_id=int(telegram_id))
         return chat.id
 
