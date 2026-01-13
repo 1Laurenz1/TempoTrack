@@ -2,10 +2,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.application.usecases.register_user import RegisterUserUseCase
 
-from src.domain.entities.user import User
-
 from src.infrastructure.database.repositories.user_repository_impl import UserRepositoryImpl
-from src.infrastructure.exceptions.user_already_exists_error import UserAlreadyExistsError
 
 from src.application.services.password_service import (
     PasswordService

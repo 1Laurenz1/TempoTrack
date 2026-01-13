@@ -12,9 +12,6 @@ from src.infrastructure.exceptions.infrastructure_error import (
 from src.infrastructure.exceptions.user_already_exists_error import (
     UserAlreadyExistsError
 )
-from src.infrastructure.exceptions.user_not_found_error import (
-    UserNotFoundError
-)
 from src.infrastructure.database.mappers.user_mapper import UserMapper
 
 from src.common.logging.logger_main import logger

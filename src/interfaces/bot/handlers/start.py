@@ -1,7 +1,6 @@
 from aiogram import Router
 from aiogram.types import Message
 from aiogram.filters import CommandStart
-from redis.asyncio import Redis
 
 from src.infrastructure.redis.redis_client import get_redis_connection
 

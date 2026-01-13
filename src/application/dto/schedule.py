@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from datetime import datetime, time
+from datetime import time
 from typing import Optional
 
 from src.domain.value_objects.day_of_week import DayOfWeek

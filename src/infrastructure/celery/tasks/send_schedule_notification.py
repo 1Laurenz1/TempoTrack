@@ -5,7 +5,6 @@ from src.infrastructure.database.repositories.schedule_notification import (
 from src.infrastructure.database.repositories.user_repository_impl import (
     UserRepositoryImpl
 )
-from src.infrastructure.redis.redis_client import get_redis_connection
 
 from src.application.usecases.prepare_schedule_notification import (
     PrepareScheduleNotificationUseCase
@@ -29,9 +28,7 @@ async def send_schedule_notification_task(notification_id: int):
 
         prepare_usecase = PrepareScheduleNotificationUseCase(notification_repo)
 
-        redis = await get_redis_connection()
-        telegram_sender = TelegramSenderImpl()
-        
+        telegram_sender = TelegramSenderImpl()        
 
         notification = await notification_repo.get_by_id(notification_id)
         

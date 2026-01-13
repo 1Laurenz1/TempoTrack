@@ -6,9 +6,6 @@ from src.domain.repositories.schedule_notifications_repository import (
     ScheduleNotificationRepository
 )
 from src.domain.entities.schedule_notification import ScheduleNotification
-from src.domain.value_objects.notification_status import (
-    ScheduleNotificationStatus
-)
 
 from src.common.logging.logger_main import logger
 

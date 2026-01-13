@@ -43,8 +43,8 @@ class GenerateScheduleNotificationsUseCase:
             user_id=user_id
         )
         
-        if not schedule_items:
-            raise NoScheduleItemsError("Failed to retrieve schedule items — it is empty.")
+        # if not schedule_items:
+            # raise NoScheduleItemsError("Failed to retrieve schedule items — it is empty.")
         
         today = datetime.now(timezone.utc).date()
         

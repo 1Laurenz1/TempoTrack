@@ -16,11 +16,9 @@ from src.infrastructure.database.models.schedule_notification import (
 )
 
 import pytest_asyncio
-import pytest
 
 import asyncio
 
-# asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
 @pytest_asyncio.fixture
 async def event_loop():

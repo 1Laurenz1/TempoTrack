@@ -35,6 +35,10 @@ async def generate_schedule_notifications_task():
         for user_id in user_ids:
             try:
                 notifications = await usecase.execute(user_id)
+                
+                if notifications is None:
+                    notifications = []
+                
                 logger.info(f"Notifications generated for user_id={user_id}")
                 
                 for notification in notifications:

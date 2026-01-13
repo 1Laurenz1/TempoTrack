@@ -1,4 +1,3 @@
-from src.domain.entities.schedule import Schedule
 from src.domain.repositories.schedule_repository import ScheduleRepository
 from src.domain.repositories.user_repository import UserRepository
 

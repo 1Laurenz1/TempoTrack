@@ -1,6 +1,6 @@
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.exc import SQLAlchemyError, IntegrityError
+from sqlalchemy.exc import SQLAlchemyError
 
 from src.domain.repositories.schedule_repository import ScheduleRepository
 from src.domain.entities.schedule import Schedule

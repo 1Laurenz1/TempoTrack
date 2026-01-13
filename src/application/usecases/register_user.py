@@ -1,8 +1,6 @@
 from src.domain.entities.user import User
 from src.domain.repositories.user_repository import UserRepository
 
-from src.infrastructure.exceptions.user_already_exists_error import UserAlreadyExistsError
-
 from src.application.services.password_service import (
     PasswordService
 )

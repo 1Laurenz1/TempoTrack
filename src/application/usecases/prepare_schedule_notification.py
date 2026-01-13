@@ -1,4 +1,3 @@
-from src.application.ports.telegram_sender import TelegramSender
 from src.application.exceptions.schedule_notifications import (
     InvalidNotificationStatusError,
 )

@@ -9,7 +9,6 @@ from sqlalchemy.ext.asyncio import (
 from src.infrastructure.config.config_reader import settings
 from src.common.logging.logger_main import logger
 
-from contextlib import asynccontextmanager
 from typing import AsyncGenerator
 
 
@@ -30,7 +29,6 @@ AsyncSessionLocal = async_sessionmaker(
 )
 
 
-# @asynccontextmanager
 async def get_session() -> AsyncGenerator[AsyncSession, None]:
     async with AsyncSessionLocal() as session:
         try:

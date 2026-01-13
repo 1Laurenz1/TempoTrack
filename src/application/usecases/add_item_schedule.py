@@ -3,7 +3,6 @@ from src.application.exceptions.permissions import AccessDeniedError
 from src.application.exceptions.schedule import ScheduleNotFoundError
 from src.domain.entities.schedule_items import ScheduleItems
 
-from src.application.services.jwt_service import JwtService
 from src.application.dto.schedule import (
     AddScheduleItemRequest,
     AddScheduleItemResponse

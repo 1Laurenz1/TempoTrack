@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 
 from src.domain.entities.schedule_items import ScheduleItems
 
-from typing import List, Optional
+from typing import List
 
 
 class ScheduleItemsRepository(ABC):

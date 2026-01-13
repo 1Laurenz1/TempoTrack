@@ -7,7 +7,6 @@ from src.interfaces.bot.bot_init import bot
 from src.application.ports.telegram_sender import TelegramSender
 
 from src.infrastructure.redis.redis_client import get_redis_connection
-from src.infrastructure.redis.verification_code_storage import RedisVerificationCodeStorage
 
 from src.common.logging.logger_main import logger
 
@@ -18,7 +17,6 @@ class TelegramSenderImpl(TelegramSender):
     def __init__(
         self,
         bot: Bot = bot,
-        # redis: Redis | None = None,
     ):
         self.bot = bot
         self.redis: Redis | None = None
