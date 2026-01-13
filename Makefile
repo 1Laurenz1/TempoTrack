@@ -4,6 +4,8 @@ STORAGE_FILE = docker_compose/storage.yaml
 APP_FILE = docker_compose/app.yaml
 BOT_FILE = docker_compose/bot.yaml
 REDIS_FILE = docker_compose/redis.yaml
+CELERY_WORKER_FILE = docker_compose/celery_worker.yaml
+CELERY_BEAT_FILE = docker_compose/celery_beat.yaml
 
 # ------------------------
 # App
@@ -81,22 +83,37 @@ bot-logs:
 	${DC} -f ${BOT_FILE} logs -f
 
 # ------------------------
+# Celery
+# ------------------------
+.PHONY: celery
+celery:
+	${DC} -f ${CELERY_WORKER_FILE} -f ${CELERY_BEAT_FILE} up --build -d
+
+.PHONY: drop-celery
+drop-celery:
+	${DC} -f ${CELERY_WORKER_FILE} -f ${CELERY_BEAT_FILE} down
+
+.PHONY: celery-logs
+celery-logs:
+	${DC} -f ${CELERY_WORKER_FILE} -f ${CELERY_BEAT_FILE} logs -f
+
+# ------------------------
 # All services
 # ------------------------
 .PHONY: all
 all:
-	${DC} -f ${STORAGE_FILE} -f ${REDIS_FILE} -f ${APP_FILE} -f ${BOT_FILE} up --build -d
+	${DC} -f ${STORAGE_FILE} -f ${REDIS_FILE} -f ${APP_FILE} -f ${BOT_FILE} -f ${CELERY_WORKER_FILE} -f ${CELERY_BEAT_FILE} up --build -d
 
 .PHONY: drop-all
 drop-all:
-	${DC} -f ${STORAGE_FILE} -f ${REDIS_FILE} -f ${APP_FILE} -f ${BOT_FILE} down
+	${DC} -f ${STORAGE_FILE} -f ${REDIS_FILE} -f ${APP_FILE} -f ${BOT_FILE} -f ${CELERY_WORKER_FILE} -f ${CELERY_BEAT_FILE} down
 
 .PHONY: all-logs
 all-logs:
-	${DC} -f ${STORAGE_FILE} -f ${REDIS_FILE} -f ${APP_FILE} -f ${BOT_FILE} logs -f
+	${DC} -f ${STORAGE_FILE} -f ${REDIS_FILE} -f ${APP_FILE} -f ${BOT_FILE} -f ${CELERY_WORKER_FILE} -f ${CELERY_BEAT_FILE} logs -f
 
 # ------------------------
 # Restart everything
 # ------------------------
 .PHONY: restart-all
-restart-all: drop-all al
+restart-all: drop-all all
